@@ -107,6 +107,14 @@ Order of the Sinking Star Demo (19 June 2026)
 
 let map = null;
 
+function updateMarkerLabels() {
+  const currentZoom = map.getZoom();
+  const showLabels = currentZoom >= 5; // Adjust threshold as needed
+  document.querySelectorAll('.marker-label').forEach(label => {
+    label.style.display = showLabels ? 'block' : 'none';
+  });
+}
+
 function drawMap() {
   // old map was 1920x1080 and the grid was almost precisely 10 pixels
   // center was at 860, 740
@@ -150,7 +158,7 @@ function drawMap() {
   // a set of coefficients a, b, c, d for transforming a point of a form (x,y) into (a*x + b, c*y + d)
   crs.transformation = new L.Transformation(factor, dx, (m.flip_y ? -1 : 1) *  factor, dy); // Invert the y-axis
 
-  const map = L.map('map', {
+  map = L.map('map', {
     crs: crs,
     zoom: 2,
     center: center,
@@ -319,6 +327,10 @@ function drawMap() {
     let layercontrol = L.control.layers(baseLayers, overlaysWithCounts, {collapsed: false, position: 'topright'}).addTo(map);
 
 
+    map.on('zoom', updateMarkerLabels);
+
+    updateMarkerLabels();
+
   })
 
   const svgLayer = L.svg({padding: 2}).addTo(map);
@@ -412,6 +424,7 @@ function drawMap() {
     }
     */
   }
+
 
   //map.on('move zoomend moveend resize', drawGrid);
   //map.whenReady(drawGrid);
