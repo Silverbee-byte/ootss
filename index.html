@@ -24,7 +24,6 @@
 <script src="https://cdn.jsdelivr.net/npm/leaflet-search@4.0.0/dist/leaflet-search.src.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-search@4.0.0/dist/leaflet-search.src.min.css">
 
-
 <style>
 
 .github-corner {
@@ -83,6 +82,33 @@ html, body, #map { width:100%; height: 100%; margin: 0; padding: 0; }
   color: white;
   text-shadow: 1px 1px 4px black;
   font-family: sans-serif;
+}
+
+.image-wrapper {
+  display: block;
+}
+.image-wrapper img {
+  display: block;
+  max-width: 100%;
+  max-height: 360px;
+}
+
+.popup-header {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 2px;
+}
+.popup-subheader {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 8px;
+}
+.image-wrapper img {
+  display: block;
+  max-width: 100%;
+  max-height: 360px;
+  border-radius: 4px;
 }
 
 </style>
@@ -208,13 +234,6 @@ function drawMap() {
 
   fetch('data/markers.json').then(r=>r.json()).then(data=>{
 
-  /*
-    L.geoJSON(data, {
-      pointToLayer: (feature, latlng) =>L.marker(latlng),
-    }).bindPopup(marker => { return '<pre>'+JSON.stringify(marker.feature, null, 2)+'</pre>' + String(marker.getLatLng())})
-      .bindTooltip(marker => marker.feature.properties.name).addTo(map)
-  */
-
     counters = {};
 
     let layers = {};
@@ -271,23 +290,58 @@ function drawMap() {
 
       marker.feature = feature;
 
+      const getCoordinates = marker=>`${marker.feature.geometry.coordinates[0]}, ${marker.feature.geometry.coordinates[1]}`;
 
-      marker.bindTooltip(marker => `${marker.feature.properties.name} (${marker.feature.properties.area}) [${marker.feature.geometry.coordinates[0]},${marker.feature.geometry.coordinates[1]}]`, {offset: [15,-25]});
 
-      marker.bindPopup(marker => { return '<pre>'+JSON.stringify(marker.feature, null, 2)+'</pre>'}, {offset: [0, -35]});
+      marker.bindTooltip(marker => `${marker.feature.properties.name} (${marker.feature.properties.area}) [${getCoordinates(marker)}]`, {offset: [15,-25]});
 
-      //marker.addTo(markerGroup);
+      //marker.bindPopup(marker => { return `<div class="image-wrapper"><img src="images/levels/${marker.feature.properties.name}.webp"></div>`}, {
+
+      marker.on('click', () => {
+        const props = marker.feature.properties;
+        const name = props.name;
+
+        const buildWrapper = (bodyHTML) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'image-wrapper';
+          wrapper.innerHTML = `
+            <div class="popup-header">${props.name}</div>
+            <div class="popup-subheader">${props.area} [${getCoordinates(marker)}]</div>
+            ${bodyHTML}
+          `;
+          return wrapper;
+        };
+
+        const img = new Image();
+        img.src = `images/levels/${name}.webp`;
+
+        img.onload = () => {
+          const wrapper = buildWrapper(`<img class="popup-image" src="${img.src}">`);
+          marker.unbindPopup();
+          marker.bindPopup(wrapper, { offset: [0, -35], maxWidth: 500, minWidth: 360 });
+          marker.openPopup();
+        };
+
+        img.onerror = () => {
+          const wrapper = buildWrapper(`<div class="image-error">image not available yet</div>`);
+          marker.unbindPopup();
+          marker.bindPopup(wrapper, { offset: [0, -35], maxWidth: 500, minWidth: 360 });
+          marker.openPopup();
+        };
+      });
+
+
 
       if (!layers[feature.properties.area]) {
-        layers[feature.properties.area] = L.layerGroup().addTo(map);
+        layers[feature.properties.area] = L.layerGroup().addTo(markerGroup);
       }
 
       marker.addTo(layers[feature.properties.area]);
 
     }
 
-    console.log('total', data.features.length);
-    console.log(counters);
+    //console.log('total', data.features.length);
+    //console.log(counters);
 
     let text =`Total markers: ${data.features.length}`;
 
@@ -298,8 +352,6 @@ function drawMap() {
 
     document.querySelector('#info').innerHTML = text;
     document.querySelector('#info').title = alt;
-
-    searchControl = new L.Control.Search({propertyName: 'searchText', initial: false, layer: markerGroup, hideMarkerOnCollapse: true}).addTo(map);
 
     let baseLayers={}
 
@@ -332,6 +384,20 @@ function drawMap() {
 
 
     updateMarkerLabels();
+
+    searchControl = new L.Control.Search({propertyName: 'searchText', initial: false, layer: markerGroup, hideMarkerOnCollapse: true}).addTo(map);
+
+
+
+
+
+
+
+
+
+
+
+
 
   })
 
@@ -449,7 +515,6 @@ function drawMap() {
 
 window.onload = function() {
   drawMap();
-
 }
 
 </script>
