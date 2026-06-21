@@ -309,13 +309,12 @@ function drawMap() {
     baseLayers['Demo2_16k'] = tilesLayer;
 
     // update overlay names to include count
-
-var overlaysWithCounts = Object.fromEntries(
-  Object.entries(layers).map(([name, layer]) => [
-    `${name}${typeof layer.getLayers === 'function' ? ' ('+layer.getLayers().length+')' : ''}`,
-    layer
-  ])
-);
+    var overlaysWithCounts = Object.fromEntries(
+      Object.entries(layers).map(([name, layer]) => [
+        `${name}${typeof layer.getLayers === 'function' ? ' ('+layer.getLayers().length+')' : ''}`,
+        layer
+      ])
+    );
 
     let layercontrol = L.control.layers(baseLayers, overlaysWithCounts, {collapsed: false, position: 'topright'}).addTo(map);
 
