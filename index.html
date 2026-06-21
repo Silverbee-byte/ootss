@@ -333,7 +333,7 @@ function drawMap() {
       const getCoordinates = marker=>`${marker.feature.geometry.coordinates[0]}, ${marker.feature.geometry.coordinates[1]}`;
 
 
-      marker.bindTooltip(marker => `${marker.feature.properties.name} (${marker.feature.properties.area}) [${getCoordinates(marker)}]`, {offset: [15,-25]});
+      marker.bindTooltip(marker => `<b>${marker.feature.properties.name}</b><br/>${marker.feature.properties.area}<br/>${getCoordinates(marker)}`, {offset: [15,-25]});
 
       //marker.bindPopup(marker => { return `<div class="image-wrapper"><img src="images/levels/${marker.feature.properties.name}.webp"></div>`}, {
 
