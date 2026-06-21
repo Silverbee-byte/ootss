@@ -339,7 +339,7 @@ function drawMap() {
           const wrapper = document.createElement('div');
           wrapper.className = 'image-wrapper';
           wrapper.innerHTML = `
-            <div class="popup-header"><a href="javascript:copyToClipboard('${props.name}')"><b>${props.name}</b></a><br>${props.area} (${getCoordinates(marker)})</div><hr/>
+            <div class="popup-header"><a href="javascript:copyToClipboard('${props.name}')"><b>${props.name}</b></a><br>${props.area} (${getCoordinates(marker)})</div>
             ${bodyHTML}
             ${props.solution && '<hr><span class="wrap"><a href="https://github.com/joric/ootss/wiki#solutions" target=_blank>'+props.solution+'</a></span>'||''}
           `;
@@ -350,7 +350,7 @@ function drawMap() {
         img.src = `images/levels/${name}.webp`;
 
         img.onload = () => {
-          const wrapper = buildWrapper(`<img class="popup-image" src="${img.src}">`);
+          const wrapper = buildWrapper(`<hr><img class="popup-image" src="${img.src}">`);
           marker.unbindPopup();
           marker.bindPopup(wrapper, { offset: [0, -35], maxWidth: 360, minWidth: 360 });
           marker.openPopup();
@@ -359,7 +359,7 @@ function drawMap() {
         img.onerror = () => {
           const wrapper = buildWrapper(`<div class="image-error"></div>`);
           marker.unbindPopup();
-          marker.bindPopup(wrapper, { offset: [0, -35], maxWidth: 360, minWidth: 360 });
+          marker.bindPopup(wrapper, { offset: [0, -35] });
           marker.openPopup();
         };
       });
