@@ -691,26 +691,33 @@ function drawMap() {
 
     let layers = {};
 
-    let cellSize=17.5;
-    let iw = 2044;
-    let ih = 1999;
 
-    let tw = iw/cellSize;
-    let th = ih/cellSize;
+    function getImageBounds(cellSize, iw,ih, dx, dy) {
+      let tw = iw/cellSize;
+      let th = ih/cellSize;
+      let top = dy;
+      let left = dx;
+      let bottom = th+dy;
+      let right = tw+dx;
+      return [[top,left],[bottom,right]];
+    }
 
-    let dx=-62.15;
-    let dy=-57.8;
 
-    let top = dy;
-    let left = dx;
-    let bottom = th+dy;
-    let right = tw+dx;
-
-    let imageLayer = L.imageOverlay('images/SPOILER_image.jpg', [[top,left],[bottom,right]],{
+    let imageLayer = L.imageOverlay('images/SPOILER_image.jpg', getImageBounds(17.5, 2044, 1999, -62.15, -57.8),{
       attribution: '<a href="https://youtu.be/OIxuGF6CwnU" target=_blank>YouTube</a>',
     });//.addTo(map);
 
     layers['SPOILER_image'] = imageLayer;
+
+
+
+
+    let imageLayer2 = L.imageOverlay('images/image2.webp', getImageBounds(6.67, 1919, 1079, -149,-88.0),{
+      attribution: '<a href="https://youtu.be/OIxuGF6CwnU" target=_blank>YouTube</a>',
+    }).addTo(map);
+
+    layers['image2'] = imageLayer;2
+
 
     layers['regions'] = polygonLayer;
 
