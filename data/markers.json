@@ -1535,21 +1535,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          40.0,
-          -58.0
-        ]
-      },
-      "properties": {
-        "type": "level",
-        "area": "water",
-        "name": "one_vs_three"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           22.0,
           -49.0
         ]
@@ -1618,6 +1603,21 @@
         "type": "level",
         "area": "water",
         "name": "easy_situation_v2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40.0,
+          -58.0
+        ]
+      },
+      "properties": {
+        "type": "level",
+        "area": "water",
+        "name": "one_vs_three"
       }
     }
   ]
