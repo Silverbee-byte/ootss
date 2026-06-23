@@ -1,5 +1,3 @@
-center
-069,104
 promesst1_streamlined
 mirror_1
 mirror_2
