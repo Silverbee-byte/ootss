@@ -72,8 +72,8 @@ heroes2_reprise
 heroes2_16v4
 heroes2_18
 mosh_pit_small
-heroes2_17
 heroes2_17_intro
+heroes2_17
 heroes2_20
 heroes2_21b
 heroes2_22_v2
