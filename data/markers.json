@@ -545,21 +545,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          4.0,
-          -17.0
-        ]
-      },
-      "properties": {
-        "type": "level",
-        "area": "heroes1",
-        "name": "heroes1_7_v2"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           3.0,
           -17.0
         ]
@@ -568,6 +553,21 @@
         "type": "level",
         "area": "heroes1",
         "name": "heroes1_6"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0,
+          -17.0
+        ]
+      },
+      "properties": {
+        "type": "level",
+        "area": "heroes1",
+        "name": "heroes1_7_v2"
       }
     },
     {
