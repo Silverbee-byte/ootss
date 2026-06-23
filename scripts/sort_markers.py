@@ -1,9 +1,12 @@
 import json
 import os
 
-j = json.load(open('../data/markers.json'))
+with open ('order.txt') as f:
+    names = f.read().splitlines()
 
-names = open('order.txt').read().splitlines()
+with open('../data/markers.json') as f:
+    j = json.load(f)
+
 
 name_order = {name: index for index, name in enumerate(names)}
 
@@ -15,9 +18,7 @@ features = sorted(
 
 out = {"type": "FeatureCollection", "features": features}
 
-f = open('markers.json', 'w', encoding='utf-8', newline='\n')
-json.dump(out, f, indent=2)
+with open('../data/markers.json', 'w', encoding='utf-8', newline='\n') as f:
+    json.dump(out, f, indent=2)
 
-
-
-
+print("Done.")
