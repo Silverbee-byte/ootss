@@ -12,6 +12,13 @@ SCALE_FACTOR = 1.0
 dx = -86 + 0.5
 dy = -74 - (192-108)//2 + 0.5
 
+dx += 80
+
+oy = 69
+
+dy += 69*3 + 24
+
+
 colorMap = {
     '#000000': { 'name': 'center',       'title': 'Center' },
     '#ffff00': { 'name': 'crossroads',   'title': 'Crossroads'        },
@@ -54,10 +61,7 @@ with rasterio.open(INPUT) as src:
         color = f'#{intvalue:06x}'
         #print(color)
 
-        scaled_coords = [
-            [[(x * SCALE_FACTOR) + dx, (y * SCALE_FACTOR) + dy] for x, y in ring]
-            for ring in geom['coordinates']
-        ]
+        scaled_coords = [[[(x * SCALE_FACTOR) + dx, oy - (y * SCALE_FACTOR) + dy] for x, y in ring] for ring in geom['coordinates']]
 
         p = colorMap.get(color)
         if p:

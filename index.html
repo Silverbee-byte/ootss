@@ -689,9 +689,9 @@ function drawMap() {
 
     bounds: [[0,0],[192,192]],
 
-    center: [10,-20],
+    center: [90,-89],
 
-    flip_y: false,
+    flip_y: true,
   }
 
   let tileSize = 512; // this is essentially map size in tiles on zoom level 0
@@ -721,7 +721,7 @@ function drawMap() {
 
   map = L.map('map', {
     crs: crs,
-    zoom: 3.5,
+    zoom: 1,
     center: center,
     zoomControl: false,
     maxZoom: 8,
@@ -811,7 +811,8 @@ function drawMap() {
     }
 
 
-    let imageLayer2 = L.imageOverlay('images/overworld.webp', getImageBounds(6.67, 1919, 1079, -149,-88.0),{
+
+    let imageLayer2 = L.imageOverlay('images/overworld.webp', getImageBounds(6.67, 1919, 1079, -149+80,-88.0+83.3),{
       attribution: '<a href="https://youtu.be/OIxuGF6CwnU" target=_blank>YouTube</a>',
     });//.addTo(map);
 
