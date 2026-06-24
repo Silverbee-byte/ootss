@@ -116,6 +116,10 @@ RecordKey(k) {
 ~d::RecordKey("d")
 ~x::RecordKey("x")
 ~c::RecordKey("c")
+~Up::RecordKey("w")
+~Left::RecordKey("a")
+~Down::RecordKey("s")
+~Right::RecordKey("d")
 
 StartRecording() {
     global recording, recordBuf
