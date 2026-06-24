@@ -500,12 +500,16 @@ function updateCaption() {
   `
 }
 
+function isGalleryOpen() {
+  return document.getElementById('galleryOverlay').classList.contains('open');
+}
+
+
 function toggleGallery() {
   if (document.activeElement) {
     document.activeElement.blur();
   }
-  const overlay = document.getElementById('galleryOverlay');
-  overlay.classList.toggle('open')
+  document.getElementById('galleryOverlay').classList.toggle('open');
 }
 
 
@@ -1093,7 +1097,7 @@ function drawMap() {
         //map.toggleFullscreen();
       }
     } else if (e.code=='Enter') {
-      if (currentOpenMarker) {
+      if (currentOpenMarker && !isGalleryOpen) {
         openGallery(currentOpenMarker.feature.properties.name);
       }
     } else if (e.code=='Escape') {
