@@ -13,48 +13,20 @@
 <meta property="og:description" content="Order ot the Sinking Star Interactive Map. Track locations, uncover hidden secrets, and navigate the world with ease using this cartography tool." />
 <meta property="og:locale" content="en_US" />
 
-<template id="remote">
+<link href="js/lib//font-awesome/css/all.min.css" rel="stylesheet" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+<script src="js/lib//leaflet/leaflet.min.js"></script>
+<link href="js/lib//leaflet/leaflet.min.css" rel="stylesheet" />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link href="js/lib//swiper/swiper-bundle.min.css" rel="stylesheet" />
+<script src="js/lib//swiper/swiper-bundle.min.js"></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.7/swiper-bundle.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.7/swiper-bundle.min.js"></script>
+<link href="js/lib//leaflet-search/leaflet-search.src.min.css" rel="stylesheet"/>
+<script src="js/lib//leaflet-search/leaflet-search.src.min.js"></script>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-search@4.0.0/dist/leaflet-search.src.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/leaflet-search@4.0.0/dist/leaflet-search.src.min.js"></script>
+<link href="js/lib//leaflet-mouseposition/L.Control.MousePosition.css" rel="stylesheet" />
+<script src="js/lib//leaflet-mouseposition/L.Control.MousePosition.js"></script>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-mouse-position@1.2.0/src/L.Control.MousePosition.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/leaflet-mouse-position@1.2.0/src/L.Control.MousePosition.min.js"></script>
-
-</template>
-
-
-<template id="local">
-
-  <link href="../../lib/font-awesome/css/all.min.css" rel="stylesheet" />
-
-  <script src="../../lib/leaflet/leaflet.min.js"></script>
-  <link href="../../lib/leaflet/leaflet.min.css" rel="stylesheet" />
-
-  <link href="../../lib/swiper/swiper-bundle.min.css" rel="stylesheet" />
-  <script src="../../lib/swiper/swiper-bundle.min.js"></script>
-
-  <link href="../../lib/leaflet-search/leaflet-search.src.min.css" rel="stylesheet"/>
-  <script src="../../lib/leaflet-search/leaflet-search.src.min.js"></script>
-
-  <link href="../../lib/leaflet-mouseposition/L.Control.MousePosition.css" rel="stylesheet" />
-  <script src="../../lib/leaflet-mouseposition/L.Control.MousePosition.js"></script>
-
-</template>
-
-<script>
-const tpl = document.getElementById(location.protocol === 'file:' ? 'local' : 'remote').content.cloneNode(true);
-tpl.querySelectorAll('script').forEach(s => s.async = false);
-document.head.appendChild(tpl);
-</script>
 
 <style>
 .github-corner {
