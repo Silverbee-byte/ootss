@@ -273,7 +273,7 @@ DoStop(*) {
 }
 
 ; ---------- Hotkeys ----------
-^e:: OpenGui()
+^!e:: OpenGui()
 
 !e:: {
     global solIndex, solNames, solMap, ddl
@@ -315,7 +315,7 @@ DoStop(*) {
     }
 }
 
-^!e:: {
+^e:: {
     global recording, solIndex, solNames, ddl
     if recording {
         name := IsObject(ddl) ? CurrentSelectedName() : ""
