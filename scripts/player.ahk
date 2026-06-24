@@ -1,22 +1,47 @@
 #Requires AutoHotkey v2.0
-
 global solMap := Map()
 global solNames := []
 global solIndex := 0
 global stopFlag := false
+global recording := false
+global recordBuf := ""
+global mainGui := 0
+global ddl := 0
+global SolutionsPath := "../data/solutions.txt"
 
-; Load CSV: name,sequence per line
-Loop Read, "../data/solutions.txt" {
-    line := A_LoopReadLine
-    if (line = "")
-        continue
-    parts := StrSplit(line, ":", , 2)
-    if (parts.Length = 2) {
-        solMap[parts[1]] := parts[2]
-        solNames.Push(parts[1])
+; ---------- Load ----------
+LoadSolutions() {
+    global solMap, solNames
+    solMap := Map()
+    solNames := []
+    Loop Read, SolutionsPath {
+        line := A_LoopReadLine
+        if (line = "")
+            continue
+        parts := StrSplit(line, ":", , 2)
+        if (parts.Length >= 1) {
+            name := parts[1]
+            sol := (parts.Length = 2) ? parts[2] : ""
+            solMap[name] := sol
+            solNames.Push(name)
+        }
     }
 }
+LoadSolutions()
 
+; ---------- Save (rewrite whole file) ----------
+SaveSolutions() {
+    global solMap, solNames
+    out := ""
+    for i, name in solNames {
+        out .= name ":" solMap[name] "`n"
+    }
+    f := FileOpen(SolutionsPath, "w")
+    f.Write(out)
+    f.Close()
+}
+
+; ---------- RLE ----------
 Decode(s) {
     o := "", p := 1
     while p := RegExMatch(s, "(.)(\d*)", &m, p) {
@@ -26,15 +51,46 @@ Decode(s) {
     }
     return o
 }
+Encode(s) {
+    if (s = "")
+        return ""
+    out := ""
+    cur := SubStr(s, 1, 1)
+    cnt := 1
+    len := StrLen(s)
+    Loop len - 1 {
+        c := SubStr(s, A_Index + 1, 1)
+        if (c = cur) {
+            cnt++
+        } else {
+            out .= cur (cnt > 1 ? cnt : "")
+            cur := c
+            cnt := 1
+        }
+    }
+    out .= cur (cnt > 1 ? cnt : "")
+    return out
+}
 
-; Returns true if completed fully, false if cancelled
+; ---------- Display helpers ----------
+DisplayList() {
+    global solNames, solMap
+    arr := []
+    for i, name in solNames
+        arr.Push(name " (" StrLen(solMap[name]) ")")
+    return arr
+}
+NameFromDisplay(text) {
+    return RegExReplace(text, " \(\d+\)$", "")
+}
+
+; ---------- Playback ----------
 Play(s) {
     global stopFlag
     stopFlag := false
     WinActivate("ahk_exe sinking_star.exe")
     SetKeyDelay(150)
     decoded := Decode(s)
-
     Loop Parse, decoded {
         if stopFlag {
             ToolTip("Cancelled")
@@ -47,57 +103,184 @@ Play(s) {
     return true
 }
 
-; Alt+E: play the level at solIndex+1; only advance index if it finishes
-!e:: {
-    global solIndex, solNames, solMap
-    nextIndex := solIndex + 1
-    if (nextIndex > solNames.Length) {
-        MsgBox("No more lines left in solutions.csv")
+; ---------- Recording ----------
+; Keys used by the game in solutions: w a s d x
+RecordKey(k) {
+    global recording, recordBuf
+    if recording
+        recordBuf .= k
+}
+~w::RecordKey("w")
+~a::RecordKey("a")
+~s::RecordKey("s")
+~d::RecordKey("d")
+~x::RecordKey("x")
+
+StartRecording() {
+    global recording, recordBuf
+    recording := true
+    recordBuf := ""
+    ToolTip("Recording...")
+}
+
+StopRecordingAndSave(name) {
+    global recording, recordBuf, solMap
+    if !recording
+        return
+    recording := false
+    encoded := Encode(recordBuf)
+    solMap[name] := encoded
+    SaveSolutions()
+    RefreshDropdown(name)
+    ToolTip("Saved " name ": " encoded)
+    SetTimer(() => ToolTip(), -1200)
+}
+
+; ---------- GUI ----------
+RefreshDropdown(selectName := "") {
+    global ddl, solNames
+    if !IsObject(ddl)
+        return
+    ddl.Delete()
+    ddl.Add(DisplayList())
+    if (selectName != "") {
+        for i, n in solNames {
+            if (n = selectName) {
+                ddl.Choose(i)
+                break
+            }
+        }
+    } else {
+        ddl.Choose(1)
+    }
+}
+
+CurrentSelectedName() {
+    global ddl
+    if !IsObject(ddl)
+        return ""
+    return NameFromDisplay(ddl.Text)
+}
+
+OpenGui(*) {
+    global mainGui, ddl, solNames, solIndex
+    if IsObject(mainGui) {
+        mainGui.Show()
         return
     }
-    name := solNames[nextIndex]
+    mainGui := Gui("+AlwaysOnTop", "Solution Player")
+    mainGui.Add("Text", , "Level:")
+    ddl := mainGui.Add("DropDownList", "w300 vChoice", DisplayList())
+    startSel := (solIndex >= 1 && solIndex <= solNames.Length) ? solIndex : 1
+    ddl.Choose(startSel)
+    ddl.OnEvent("Change", OnDropdownChange)
+
+    playBtn := mainGui.Add("Button", "w90", "Play")
+    recBtn := mainGui.Add("Button", "x+10 w90", "Record")
+    stopBtn := mainGui.Add("Button", "x+10 w90", "Stop")
+
+    playBtn.OnEvent("Click", (*) => DoPlay())
+    recBtn.OnEvent("Click", (*) => DoRecord())
+    stopBtn.OnEvent("Click", (*) => DoStop())
+
+    mainGui.OnEvent("Close", (*) => mainGui.Hide())
+    mainGui.Show("AutoSize")
+}
+
+OnDropdownChange(*) {
+    global ddl, solNames, solIndex
+    name := NameFromDisplay(ddl.Text)
+    for i, n in solNames {
+        if (n = name) {
+            solIndex := i
+            break
+        }
+    }
+}
+
+DoPlay(*) {
+    global solMap
+    name := CurrentSelectedName()
+    if (name = "")
+        return
+    ToolTip("Playing: " name)
+    Play(solMap[name])
+    SetTimer(() => ToolTip(), -1000)
+}
+
+DoRecord(*) {
+    StartRecording()
+}
+
+DoStop(*) {
+    global stopFlag, recording
+    stopFlag := true ; cancels any active playback
+    name := CurrentSelectedName()
+    if (recording && name != "")
+        StopRecordingAndSave(name)
+}
+
+; ---------- Hotkeys ----------
+^e:: OpenGui()
+
+!e:: {
+    global solIndex, solNames, solMap, ddl
+
+    name := ""
+    if IsObject(ddl)
+        name := CurrentSelectedName()
+    if (name = "" && solIndex >= 1 && solIndex <= solNames.Length)
+        name := solNames[solIndex]
+    if (name = "" && solNames.Length >= 1) {
+        name := solNames[1]
+        solIndex := 1
+    }
+    if (name = "") {
+        MsgBox("No level selected")
+        return
+    }
+
+    ; find index of the level we're about to play
+    curIdx := 0
+    for i, n in solNames {
+        if (n = name) {
+            curIdx := i
+            break
+        }
+    }
+
     ToolTip("Playing: " name)
     completed := Play(solMap[name])
     SetTimer(() => ToolTip(), -1000)
 
-    if completed
-        solIndex := nextIndex  ; only advance if fully played
-}
-
-; Ctrl+E: set index to a specific level by name (does NOT play)
-^e:: {
-    global solMap, solNames, solIndex
-
-    pickGui := Gui("+AlwaysOnTop", "Set level")
-    pickGui.Add("Text", , "Choose level:")
-    ddl := pickGui.Add("DropDownList", "w250 vChoice", solNames)
-    ddl.Choose(1)
-
-    okBtn := pickGui.Add("Button", "w100 Default", "OK")
-    okBtn.OnEvent("Click", PickLevel)
-    pickGui.OnEvent("Close", (*) => pickGui.Destroy())
-    pickGui.Show("AutoSize")
-
-    PickLevel(*) {
-        saved := pickGui.Submit()  ; reads vChoice etc, hides gui
-        name := saved.Choice
-        found := false
-        for i, n in solNames {
-            if (n = name) {
-                solIndex := i - 1
-                found := true
-                break
-            }
+    if completed {
+        nextIndex := curIdx + 1
+        if (nextIndex > solNames.Length) {
+            MsgBox("No more lines left in solutions file")
+        } else {
+            solIndex := nextIndex
+            RefreshDropdown(solNames[nextIndex])
         }
-        if found
-            ToolTip("Index set to: " name)
-        else
-            ToolTip("Level '" name "' not found")
-        SetTimer(() => ToolTip(), -1200)
     }
 }
 
-; Esc: cancel current execution, but still pass Escape through to the game
+; ---------- Ctrl+Alt+E: toggle recording ----------
+^!e:: {
+    global recording, solIndex, solNames, ddl
+    if recording {
+        name := IsObject(ddl) ? CurrentSelectedName() : ""
+        if (name = "" && solIndex >= 1 && solIndex <= solNames.Length)
+            name := solNames[solIndex]
+        if (name = "") {
+            ToolTip("No level selected to save to")
+            SetTimer(() => ToolTip(), -1200)
+            return
+        }
+        StopRecordingAndSave(name)
+    } else {
+        StartRecording()
+    }
+}
 ~Esc:: {
     global stopFlag
     stopFlag := true
