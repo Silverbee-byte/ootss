@@ -1135,8 +1135,9 @@ window.onload = function() {
     const lines = data.split('\n');
     for (const line of lines) {
       const [key, ...valueParts] = line.trim().split(':');
-      solutions[key] = valueParts.join(':');
+      if (valueParts>'') solutions[key] = valueParts.join(':');
     }
+    console.log(`${Object.keys(solutions).length} solutions found`);
   });
 
   fetch('data/regions.json').then(r=>r.json()).then(data=>{
