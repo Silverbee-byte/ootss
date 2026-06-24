@@ -26,10 +26,10 @@ mirror_10_alt2:
 mundane_mirror:
 mirror_10_b_v2:wxa5s3axsaw4s5as2dw3dw5d7xd6w2d2w2d5xds
 mirror_10_d:w2ds4wdsaw5xa6w2a3w2s2d5sd3sdxs4wd2sa2dsawxaw5xsds
-heroes1_1:
-heroes1_2_v2:
-heroes1_3:
-heroes1_4:
+heroes1_1:sd3wd2wd2sd
+heroes1_2_v2:d4sd2wd2sds2asa2wa2sa2saw
+heroes1_3:d4wd2sa4d4sd3w
+heroes1_4:ds2asd3w3awas3asdw3as2dwd4w2
 heroes1_4.5:
 heroes1_5_v2:
 heroes1_7_v2:
