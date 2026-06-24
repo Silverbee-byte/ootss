@@ -872,7 +872,8 @@ function drawMap() {
       const getTooltip = function(marker) {
         let name = marker.feature.properties.name;
         let lines = [`<b>${name}</b> / ${marker.feature.properties.area} (${getCoordinates(marker)})`];
-        if (solutions[name]) lines.push(`Soution: ${solutions[name].length} moves`);
+        let s = (solutions[name]||'');
+        if (s.length>1) lines.push(`Soution: ${s.length} moves`);
         return lines.join('<br/>');
       };
 
