@@ -869,8 +869,14 @@ function drawMap() {
 
       const getCoordinates = marker=>`${marker.feature.geometry.coordinates[0]},${marker.feature.geometry.coordinates[1]}`;
 
+      const getTooltip = function(marker) {
+        let name = marker.feature.properties.name;
+        let lines = [`<b>${name}</b> / ${marker.feature.properties.area} (${getCoordinates(marker)})`];
+        if (solutions[name]) lines.push(`Soution: ${solutions[name].length} moves`);
+        return lines.join('<br/>');
+      };
 
-      marker.bindTooltip(marker => `<b>${marker.feature.properties.name}</b><br/>${marker.feature.properties.area} (${getCoordinates(marker)})`, {offset: [20,-35]});
+      marker.bindTooltip(getTooltip, {offset: [20,-35]});
 
       //marker.bindPopup(marker => { return `<div class="image-wrapper"><img src="images/levels/${marker.feature.properties.name}.webp"></div>`}, {
 
