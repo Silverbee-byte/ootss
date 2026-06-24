@@ -7,6 +7,20 @@ DOWN := "s"
 RIGHT := "d"
 PRIMARY_ACTION := "x"
 SWITCH_CHARACTERS := "c"
+
+; Record/play codes
+CODE_UP := "U"
+CODE_LEFT := "L"
+CODE_DOWN := "D"
+CODE_RIGHT := "R"
+CODE_ACTION := "X"
+CODE_SWITCH := "C"
+
+; Physical arrow keys (scan codes, layout-independent)
+UP_ARROW := "sc148"
+LEFT_ARROW := "sc14B"
+DOWN_ARROW := "sc150"
+RIGHT_ARROW := "sc14D"
 ; =================================================
 
 global solMap := Map()
@@ -24,21 +38,21 @@ global stopBtn := 0
 global SolutionsPath := "../data/solutions.txt"
 
 global RECORD_KEY := Map(
-    "U", UP,
-    "L", LEFT,
-    "D", DOWN,
-    "R", RIGHT,
-    "X", PRIMARY_ACTION,
-    "C", SWITCH_CHARACTERS
+    CODE_UP, UP,
+    CODE_LEFT, LEFT,
+    CODE_DOWN, DOWN,
+    CODE_RIGHT, RIGHT,
+    CODE_ACTION, PRIMARY_ACTION,
+    CODE_SWITCH, SWITCH_CHARACTERS
 )
 
 global PLAYBACK_KEY := Map(
-    "U", "{Up}",
-    "L", "{Left}",
-    "D", "{Down}",
-    "R", "{Right}",
-    "X", PRIMARY_ACTION,
-    "C", SWITCH_CHARACTERS
+    CODE_UP, "{Up}",
+    CODE_LEFT, "{Left}",
+    CODE_DOWN, "{Down}",
+    CODE_RIGHT, "{Right}",
+    CODE_ACTION, PRIMARY_ACTION,
+    CODE_SWITCH, SWITCH_CHARACTERS
 )
 
 ; ---------- UI State ----------
@@ -260,15 +274,18 @@ MakeRecorder(code) {
 
 RegisterRecordingHotkeys() {
     global RECORD_KEY
+    global UP_ARROW, LEFT_ARROW, DOWN_ARROW, RIGHT_ARROW
+    global CODE_UP, CODE_LEFT, CODE_DOWN, CODE_RIGHT
+
     for code, key in RECORD_KEY {
-        try Hotkey("~" key, MakeRecorder(code))
+        try Hotkey("~*" key, MakeRecorder(code))
     }
 
-    ; Cursor keys always count as directions too, regardless of config
-    try Hotkey("~Up", MakeRecorder("u"))
-    try Hotkey("~Left", MakeRecorder("l"))
-    try Hotkey("~Down", MakeRecorder("d"))
-    try Hotkey("~Right", MakeRecorder("r"))
+    ; Physical arrows (layout-independent), code from defines
+    try Hotkey("~*" UP_ARROW, MakeRecorder(CODE_UP))
+    try Hotkey("~*" LEFT_ARROW, MakeRecorder(CODE_LEFT))
+    try Hotkey("~*" DOWN_ARROW, MakeRecorder(CODE_DOWN))
+    try Hotkey("~*" RIGHT_ARROW, MakeRecorder(CODE_RIGHT))
 }
 RegisterRecordingHotkeys()
 
