@@ -425,6 +425,8 @@ let solutions = {};
 function focusMarkerByName(name) {
   let found = null
 
+  //console.log('looking for', name);
+
   map.eachLayer((layer) => {
 
     if (layer instanceof L.Marker) {
