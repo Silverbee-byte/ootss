@@ -504,6 +504,13 @@ function isGalleryOpen() {
   return document.getElementById('galleryOverlay').classList.contains('open');
 }
 
+function selectImage() {
+  const record = images[mainSwiper.activeIndex];
+  closeGallery();
+  if (record) {
+    focusMarkerByName(record.name)
+  }
+}
 
 function toggleGallery() {
   if (document.activeElement) {
@@ -512,6 +519,9 @@ function toggleGallery() {
   document.getElementById('galleryOverlay').classList.toggle('open');
 }
 
+function closeGallery() {
+  document.getElementById('galleryOverlay').classList.remove('open');
+}
 
 function openGallery(name) {
   const index = images.findIndex((item) => item.name === name);
@@ -605,39 +615,13 @@ function initImages() {
     thumbSwiper.slideTo(mainSwiper.activeIndex)
   })
 
-
-  function closeGallery() {
-    overlay.classList.remove('open')
-  }
-
   closeBtn.onclick = closeGallery
-
-  function handleImageActivate() {
-    const record = images[mainSwiper.activeIndex]
-    closeGallery()
-    if (record) {
-      focusMarkerByName(record.name)
-    }
-  }
 
   mainSwiper.on('click', (swiper, event) => {
     if (event.target.classList.contains('slide-bg')) {
-      handleImageActivate()
+      selectImage();
     }
   })
-
-  document.addEventListener('keydown', (e) => {
-    if (!overlay.classList.contains('open')) return
-
-    if (e.key === 'Enter') {
-      currentOpenMarker = null;
-      e.preventDefault();
-      handleImageActivate();
-    }
-
-  })
-
-
 }
 
 
@@ -1101,9 +1085,15 @@ function drawMap() {
       }
 
     } else if (e.code=='Enter') {
-      if (currentOpenMarker && !isGalleryOpen) {
-        openGallery(currentOpenMarker.feature.properties.name);
+
+      if (isGalleryOpen()) {
+        selectImage();
+      } else {
+        if (currentOpenMarker) {
+          openGallery(currentOpenMarker.feature.properties.name);
+        }
       }
+      
     } else if (e.code=='Escape') {
       toggleGallery();
     }
