@@ -6,6 +6,7 @@ LEFT := "a"
 DOWN := "s"
 RIGHT := "d"
 PRIMARY_ACTION := "x"
+SECONDARY_ACTION := "v"
 SWITCH_CHARACTERS := "c"
 
 ; Record/play codes
@@ -15,6 +16,7 @@ CODE_DOWN := "D"
 CODE_RIGHT := "R"
 CODE_ACTION := "X"
 CODE_SWITCH := "C"
+CODE_SECONDARY := "V"
 
 ; Physical arrow keys (scan codes, layout-independent)
 UP_ARROW := "sc148"
@@ -43,7 +45,8 @@ global RECORD_KEY := Map(
     CODE_DOWN, DOWN,
     CODE_RIGHT, RIGHT,
     CODE_ACTION, PRIMARY_ACTION,
-    CODE_SWITCH, SWITCH_CHARACTERS
+    CODE_SWITCH, SWITCH_CHARACTERS,
+    CODE_SECONDARY, SECONDARY_ACTION
 )
 
 global PLAYBACK_KEY := Map(
@@ -52,7 +55,8 @@ global PLAYBACK_KEY := Map(
     CODE_DOWN, "{Down}",
     CODE_RIGHT, "{Right}",
     CODE_ACTION, PRIMARY_ACTION,
-    CODE_SWITCH, SWITCH_CHARACTERS
+    CODE_SWITCH, SWITCH_CHARACTERS,
+    CODE_SECONDARY, SECONDARY_ACTION
 )
 
 ; ---------- UI State ----------
