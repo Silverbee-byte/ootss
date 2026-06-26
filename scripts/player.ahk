@@ -398,8 +398,7 @@ DoStop(*) {
 ^!e:: OpenGui()           ; Ctrl+Alt+E: Open GUI
 ^+e:: PlayCurrent(true)   ; Ctrl+Shift+E: Play + select next level
 !e::  PlayCurrent(false)  ; Alt+ E: Play only
-
-^e:: { ; Ctrl+E to record solution
+^e:: {                    ; Ctrl+E to record solution
     global recording, solIndex, solNames, ddl
     if recording {
         name := IsObject(ddl) ? CurrentSelectedName() : ""
