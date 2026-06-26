@@ -938,7 +938,7 @@ function drawMap() {
         img.src = `images/levels/${name}.webp`;
 
         img.onload = () => {
-          const wrapper = buildWrapper(`<a href="javascript:openGallery('${name}');"><img class="popup-image" src="${img.src}"></a>`);
+          const wrapper = buildWrapper(`<a href="javascript:openGallery('${name}');" title="Click to open image gallery"><img class="popup-image" src="${img.src}"></a>`);
           marker.unbindPopup();
           marker.bindPopup(wrapper, { offset: [0,5], maxWidth: 360, minWidth: 360 });
           marker.openPopup();
