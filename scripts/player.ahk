@@ -394,11 +394,7 @@ DoStop(*) {
         SetIdleUI()
 }
 
-; ---------- Hotkeys ----------
-^!e:: OpenGui()           ; Ctrl+Alt+E: Open GUI
-^+e:: PlayCurrent(true)   ; Ctrl+Shift+E: Play + select next level
-!e::  PlayCurrent(false)  ; Alt+ E: Play only
-^e:: {                    ; Ctrl+E to record solution
+RecordSolution(*) {
     global recording, solIndex, solNames, ddl
     if recording {
         name := IsObject(ddl) ? CurrentSelectedName() : ""
@@ -414,6 +410,12 @@ DoStop(*) {
         StartRecording()
     }
 }
+
+; ---------- Hotkeys ----------
+^!e:: OpenGui()           ; Ctrl+Alt+E: Open GUI
+^+e:: PlayCurrent(true)   ; Ctrl+Shift+E: Play + select next level
+!e::  PlayCurrent(false)  ; Alt+ E: Play only
+^e:: RecordSolution()     ; Ctrl+E: record solution
 
 ~Esc:: {
     global stopFlag
