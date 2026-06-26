@@ -1575,36 +1575,6 @@
         "area": "water",
         "name": "one_vs_three"
       }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          80,
-          69
-        ]
-      },
-      "properties": {
-        "type": "level",
-        "area": "locations",
-        "name": "center"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          69,
-          104
-        ]
-      },
-      "properties": {
-        "type": "level",
-        "area": "locations",
-        "name": "069,104"
-      }
     }
   ]
 }
