@@ -905,12 +905,14 @@ function drawMap() {
 
       marker.on('popupopen', () => {
         currentOpenMarker = marker;
-        location.hash = marker.feature.properties.name;
+        //location.hash = marker.feature.properties.name;
       })
 
       marker.on('popupclose', () => {
         currentOpenMarker = null;
-        location.hash = '';
+        //location.hash = '';
+        if (location.hash.length > 1) 
+          history.replaceState(null, '', window.location.pathname + window.location.search);
       })
 
       marker.on('click', () => {
