@@ -6,8 +6,8 @@ LEFT := "a"
 DOWN := "s"
 RIGHT := "d"
 PRIMARY_ACTION := "x"
-SECONDARY_ACTION := "v"
 SWITCH_CHARACTERS := "c"
+SECONDARY_ACTION := "v"
 
 ; Record/play codes
 CODE_UP := "U"
