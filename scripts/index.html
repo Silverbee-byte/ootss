@@ -115,6 +115,12 @@ body { padding: 0; margin: 0; }
 </div>
 
 <div class="controls top-left">
+  <button class="btn btnTileset" id="key1" title="Fighter">1</button>
+  <button class="btn btnTileset" id="key2" title="Thief">2</button>
+  <button class="btn btnTileset" id="key3" title="Wizard">3</button>
+</div>
+
+<div class="controls top-left-up">
   <button class="btn btnSolve" id="solve" title="solve">E</button>
   <button class="btn btnReset" id="reset" title="reset level">R</button>
 </div>
@@ -147,7 +153,7 @@ body { padding: 0; margin: 0; }
 
 <script>
 
-  document.querySelectorAll('.btnTileset').forEach(c=>{ c.onclick = e=> { setTileset(e.target.id); } });
+  document.querySelectorAll('.btnTileset').forEach(c=>{ c.onclick = e=> { sendKey(e.target.id); } });
   document.querySelectorAll('.btnLevel').forEach(c=>{ c.onclick = e=> { if (typeof window[e.target.id] === 'function') window[e.target.id](); } });
   document.querySelectorAll('.btnSolve').forEach(c=>{ c.onclick = e=> { solve(); } });
   document.querySelectorAll('.btnReset').forEach(c=>{ c.onclick = e=> { reset(); } });
@@ -186,7 +192,14 @@ const keyCodes = {
   undo: 90, // Z
   reset: 82, // R
   action: 67, // C
+  key1: 49,
+  key2: 50,
+  key3: 51,
 };
+
+function sendKey(id) {
+  sendMove(keyCodes[id]);
+}
 
 function move(id) {
   if (id === 'left') {
