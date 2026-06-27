@@ -127,8 +127,8 @@ body { padding: 0; margin: 0; }
 
 <div class="controls bottom-left">
   <button class="btn btnFn" id="undo" title="undo">Z</button>
-  <button class="btn btnFn" id="redo" title="redo">X</button>
-  <button class="btn btnFn" id="action" title="action">C</button>
+  <button class="btn btnFn" id="action" title="action">X</button>
+  <button class="btn btnFn" id="swap" title="swap">C</button>
 </div>
 
 <div class="controls bottom-left-up">
@@ -154,8 +154,7 @@ body { padding: 0; margin: 0; }
 <script>
   document.querySelectorAll('.btnKey').forEach(c=>{ c.onclick = e=> { sendKey(e.target.id); } });
   document.querySelectorAll('.btnFn').forEach(c=>{ c.onclick = e=> { 
-    console.log(typeof window[e.target.id]);
-
+    //console.log(typeof window[e.target.id]);
     if (typeof window[e.target.id] === 'function') window[e.target.id](); }
   });
 
@@ -192,7 +191,6 @@ const keyCodes = {
   // other keycodes
   undo: 90, // Z
   reset: 82, // R
-  action: 67, // C
   digit1: 49,
   digit2: 50,
   digit3: 51,
@@ -218,8 +216,12 @@ function redo() {
   sendNextMove()
 }
 
+function swap() {
+  sendMove(keyCodes.c);
+}
+
 function action() {
-  sendMove(keyCodes.action)
+  sendMove(keyCodes.x)
 }
 
 function reset() {
