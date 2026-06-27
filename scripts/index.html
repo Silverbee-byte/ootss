@@ -461,11 +461,11 @@ window.onload = () => {
     //puzzleScript.compile(cleanedData);
 
     levelRanges = extractLevelNames(cleanedData);
+    let levelNames = levelRanges.map(r => r.name);
 
     const select = document.getElementById('levelSelect');
     if (select) {
       select.innerHTML = '';
-      let levelNames = levelRanges.map(r => r.name);
       levelNames.forEach( name => {
           const option = document.createElement('option');
           option.value = name;
