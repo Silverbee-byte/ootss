@@ -265,7 +265,9 @@ function stopSolution() {
 }
 
 function onLevelLoaded(levelName) {
-  document.getElementById('levelSelect').value = name;
+  const select = document.getElementById('levelSelect');
+  if (select) select.value = name;
+
   location.hash = name;
   pos = 0;
   name = levelName;
@@ -461,15 +463,16 @@ window.onload = () => {
     levelRanges = extractLevelNames(cleanedData);
 
     const select = document.getElementById('levelSelect');
-    select.innerHTML = '';
-
-    let levelNames = levelRanges.map(r => r.name);
-    levelNames.forEach( name => {
-        const option = document.createElement('option');
-        option.value = name;
-        option.textContent = name;
-        select.appendChild(option);
-    });
+    if (select) {
+      select.innerHTML = '';
+      let levelNames = levelRanges.map(r => r.name);
+      levelNames.forEach( name => {
+          const option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+      });
+    }
 
     setInterval(monitorLevelUpdate, 20);
     
