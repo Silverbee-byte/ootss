@@ -44,8 +44,9 @@ let name = 'heroes1_1';
 let timer = null;
 let previousRef = -1;
 let pos = 0;
-let playDelay = 100;
+let playDelay = 150;
 let levelRanges = {};
+let paused = false;
 
 const unpackSolution = s => s.replace(/([A-Z])(\d+)/g, (_,l,n)=>l.repeat(+n));
 const convertSolution = s => unpackSolution(s).toLowerCase();
@@ -72,12 +73,20 @@ function playSolution() {
   }
 }
 
-function updateControls(levelName) {
-  stopSolution();
-  pos = 0;
-  name = levelName;
+function onLevelLoaded(levelName) {
   document.getElementById('levelSelect').value = name;
   location.hash = name;
+  pos = 0;
+  name = levelName;
+
+  let playing = timer != null;
+
+  stopSolution();
+
+  if (playing) {
+    setTimeout(function(){ playSolution() }, 250);
+  }
+
 }
 
 function extractLevelNames(sourceText) {
@@ -118,7 +127,7 @@ function monitorLevelUpdate() {
     const levelName = lookupLevelName(levelRanges, previousRef);
     console.log(`New level event, line ${previousRef}, possibly "${levelName}".`);
     if (levelName) {
-      updateControls(levelName);
+      onLevelLoaded(levelName);
     }
   }
 }
@@ -167,7 +176,6 @@ function sendMove(code) {
 }
 
 function sendNextMove() {
-
   let solution = convertSolution(solutions[name]);
 
   if (pos < solution.length) {
@@ -186,7 +194,6 @@ function sendNextMove() {
     }
   } else {
     console.log('Solution complete.');
-    stopSolution();
     pos = 0;
   }
 }
