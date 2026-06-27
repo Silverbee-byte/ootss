@@ -30,7 +30,7 @@ body { padding: 0; margin: 0; }
   <button id="undo" onclick="undoMove()" tabindex=-1>Undo ([)</button>
   <button id="next" onclick="nextMove()" tabindex=-1>Next Move (])</button>
   <button id="reset" onclick="reset()" tabindex=-1>Reset (R)</button>
-  <button id="play" onclick="toggleSolution()" tabindex=-1>Play (E)</button>
+  <button id="play" onclick="toggleSolution()" tabindex=-1>Solve (E)</button>
 </div>
 
 <div id="gameContainer">
@@ -83,7 +83,7 @@ function pauseSolution() {
     clearInterval(timer);
     timer = null;
     console.log('Paused.');
-    document.getElementById('play').textContent = 'Play (E)';
+    document.getElementById('play').textContent = 'Solve (E)';
   }
 }
 
