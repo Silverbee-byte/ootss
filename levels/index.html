@@ -26,7 +26,10 @@ body { padding: 0; margin: 0; }
 <div class="controls">
   <select id="levelSelect" onchange="loadLevel(this.value)">
   </select>
-  <button onclick="playSolution()" tabindex=-1>Play Solution</button>
+  <button id="undo" onclick="undoMove()" tabindex=-1>Undo</button>
+  <button id="next" onclick="nextMove()" tabindex=-1>Next Move</button>
+  <button id="reset" onclick="reset()" tabindex=-1>Reset</button>
+  <button id="play" onclick="toggleSolution()" tabindex=-1>Play Solution</button>
 </div>
 
 <div id="gameContainer">
@@ -51,11 +54,44 @@ let paused = false;
 const unpackSolution = s => s.replace(/([A-Z])(\d+)/g, (_,l,n)=>l.repeat(+n));
 const convertSolution = s => unpackSolution(s).toLowerCase();
 
+function reset() {
+  stopSolution();
+  sendMove(82); // R
+}
+
+function nextMove() {
+  sendNextMove()
+}
+
+function undoMove() {
+  sendMove(90); // Z
+  if (pos > 0) {
+    pos--;
+  }
+}
+
+function playSolution() {
+  if (!timer) {
+    timer = setInterval(sendNextMove, playDelay);
+    document.getElementById('play').textContent = 'Pause Solution';
+  }
+}
+
 function pauseSolution() {
   if (timer) {
     clearInterval(timer);
     timer = null;
     console.log('Paused.');
+    document.getElementById('play').textContent = 'Play Solution';
+  }
+}
+
+function toggleSolution() {
+
+  if (!timer) {
+    playSolution();
+  } else {
+    pauseSolution();
   }
 }
 
@@ -63,14 +99,6 @@ function stopSolution() {
   pauseSolution();
   pos = 0;
   console.log('Stopped and rewound.');
-}
-
-function playSolution() {
-  if (!timer) {
-    const canvas = document.getElementById('gameCanvas');
-    canvas.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-    timer = setInterval(sendNextMove, playDelay);
-  }
 }
 
 function onLevelLoaded(levelName) {
@@ -171,6 +199,9 @@ function dispatchFakeKey(type, code) {
 }
 
 function sendMove(code) {
+  const canvas = document.getElementById('gameCanvas');
+  canvas.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+
   dispatchFakeKey('keydown', code);
   dispatchFakeKey('keyup', code);
 }
@@ -206,14 +237,9 @@ window.onload = () => {
       if (e.repeat) return;
 
       if (e.code === 'BracketRight') {
-        e.preventDefault();
-        sendNextMove()
+        nextMove();
       } else if (e.code === 'BracketLeft') {
-        e.preventDefault();
-        sendMove(90); // Z = undo
-        if (pos > 0) {
-          pos--;
-        }
+        undoMove();
       }
       else if (e.code === 'KeyR') {
         if (e.ctrlKey || e.metaKey) {
@@ -235,11 +261,7 @@ window.onload = () => {
         }
       }
       else if (e.code == 'Space') {
-        if (!timer) {
-          playSolution();
-        } else {
-          pauseSolution();
-        }
+        toggleSolution();
       }
     });
 
