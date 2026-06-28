@@ -161,7 +161,7 @@ Yellow #AA7722
 01010
 
 PurpleSwitch
-#6611CC Black
+#E225C1 Black
 .....
 .111.
 .101.
@@ -169,7 +169,7 @@ PurpleSwitch
 .....
 
 PurpleDoor
-#6611CC #220088
+#E225C1 #220088
 01010
 10001
 00000
@@ -177,7 +177,7 @@ PurpleDoor
 01010
 
 PurpleOpen
-#6611CC
+#E225C1
 0...0
 .....
 .....
@@ -631,6 +631,8 @@ Late Up [UFireball | Invulnerable] -> [ | Invulnerable]
 Late Down [DFireball | Vulnerable] -> [ | Dying Vulnerable]
 Late DOWN [DFireball | Invulnerable] -> [ | Invulnerable]
 
+[ > Hero | Hole ] -> [ Hero | Hole ]
+late [ Crate Hole ] -> [ Hole ] (temporary until mirror isles)
 late [ Hole Vulnerable ] -> [ Hole Sfx5 ]
 
 (Vulnerable objects that are attacked are designated as "Dying", but heroes can be saved by the Priest. Then the stuff that didn't get saved dies.)
