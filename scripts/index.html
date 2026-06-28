@@ -323,7 +323,7 @@ function undo() {
 }
 
 function showSolution() {
-  let solution = convertSolution(solutions[name]).toUpperCase();
+  let solution = (convertSolution(solutions[name]||'')).toUpperCase();
 
   let at = solution[pos] || ' ';
   let before = solution.slice(0, pos);
@@ -492,7 +492,7 @@ function sendMove(code) {
 }
 
 function sendNextMove() {
-  let solution = convertSolution(solutions[name]);
+  let solution = convertSolution(solutions[name]||'');
 
   if (pos < solution.length) {
     const ch = solution[pos].toLowerCase();
