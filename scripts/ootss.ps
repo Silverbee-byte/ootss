@@ -296,14 +296,6 @@ Yellow
 .....
 .....
 
-HasSaved
-Yellow
-.....
-.....
-.....
-.....
-.....
-
 Corpse
 #CCC
 .000.
@@ -322,10 +314,6 @@ Note
 
 Hole
 blue
-
-DidNotMove
-Purple
-
 
 WaterAnim1
 lightblue transparent
@@ -511,8 +499,8 @@ ClosedDoor, Hero, Crate, Wall, Monster, Corpse, Bush, FrozenMonster
 
 Saved
 
-RFireball, DidNotMove
-LFireball, HasSaved
+RFireball
+LFireball
 UFireball
 DFireball
 
@@ -699,6 +687,9 @@ late [HasSavedDoor] -> [Goal]
 late [WarpBall] -> []
 
 late [Note no Moveable] -> []
+
+
+late [Saved no Hero] -> [] (NB! removes cross from non-hero cells. re-check if truly works)
 
 ==============
 WINCONDITIONS
