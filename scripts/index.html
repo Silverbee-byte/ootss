@@ -478,7 +478,7 @@ function monitorLevelUpdate() {
 function loadLevel(levelName) {
   let levelNumber = levelNames.indexOf(levelName);
   if (levelNumber==-1) {
-    levelNumber = 0;
+    levelNumber = levelNames.length-1;
     levelName = levelNames[levelNumber];
   }
   console.log('Loading level', levelNumber, levelName);
