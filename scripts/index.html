@@ -46,7 +46,7 @@ body { padding: 0; margin: 0; }
 #play { width: 120px; }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.25;
 }
 
 .btn-prev:after {
@@ -211,13 +211,13 @@ body { padding: 0; margin: 0; }
   <canvas id="gameCanvas"></canvas>
   <div class="footer">
 
-  <button class="btn btnFn" id="undo" title="prev">[</button>
+  <button class="btn btnFn" id="prevMove" title="prev">[</button>
 
     <span id="moves">
       <span id="moves-before"></span>[<span id="moves-at"></span>]<span id="moves-after"></span>
     </span>
 
-  <button class="btn btnFn" id="redo" title="prev">]</button>
+  <button class="btn btnFn" id="nextMove" title="prev">]</button>
 
   </div>
 </div>
@@ -295,7 +295,7 @@ function close() {
   window.location.href = `../index.html`;
 }
 
-function redo() {
+function nextMove() {
   sendNextMove()
 }
 
@@ -318,6 +318,10 @@ function undo() {
     pos--;
   }
   showSolution();
+}
+
+function prevMove() {
+  undo();
 }
 
 function showSolution() {
@@ -371,6 +375,12 @@ function stopSolution() {
   console.log('Stopped and rewound.');
 }
 
+function updateState(selector, enabled) {
+  document.querySelectorAll(selector).forEach(b=>{
+    b.disabled = !enabled; 
+  });
+}
+
 function updateTitle(name) {
   let i = levelNames.indexOf(name);
   let n = levelNames.length;
@@ -379,6 +389,17 @@ function updateTitle(name) {
   //document.getElementById('title').textContent = `(${Math.ceil(i*101/n)}%) ${name}`;
 
   document.getElementById('map_link').href = `../index.html#${name}`;
+
+  updateState('#prevLevel', i!=0);
+  updateState('#nextLevel', i!=n-1);
+
+  updateState('#firstLevel', i!=0);
+  updateState('#lastLevel', i!=n-1);
+
+  // need to update that in moves
+  //let solution = convertSolution(solutions[name]||'');
+  //updateState('#prevMove', pos!=0);
+  //updateState('#nextMove', pos!=solution.length-1);
 }
 
 function onLevelLoaded(levelName) {
@@ -537,11 +558,11 @@ window.onload = () => {
       switch (e.code) {
         case 'BracketRight':
           e.preventDefault();
-          redo();
+          nextMove();
           break;
         case 'BracketLeft':
           e.preventDefault();
-          undo();
+          prevMove();
           break;
         case 'KeyR':
           if (e.ctrlKey || e.metaKey) {
