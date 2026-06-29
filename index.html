@@ -433,6 +433,14 @@ let polygonLayer = null;
 
 let solutions = {};
 
+
+function getSolutionLink(name, solvable) {
+  if (solvable) {
+    return `scripts/index.html#${name}`;
+  }
+  return `https://github.com/joric/ootss/wiki#solutions`;
+}
+
 function focusMarkerByName(name) {
   let found = null
 
@@ -507,11 +515,15 @@ let thumbSwiper = null;
 
 function updateCaption() {
   const record = images[mainSwiper.activeIndex]
-  if (!record) return
-  caption.innerHTML = `
+  if (!record) return;
+
+  let html = `
     <div class="caption-title">${record.title || ''}</div>
     <div class="caption-subtitle">${record.area || ''}</div>
-  `
+  `;
+
+  caption.innerHTML = html;
+
 }
 
 function isGalleryOpen() {
@@ -935,9 +947,7 @@ function drawMap() {
           html += bodyHTML;
           const s = solutions[props.name]||'';
           if (s) {
-            //let solutionLink = 'https://github.com/joric/ootss/wiki#solutions';
-            let solutionLink = `scripts/index.html#${props.name}`
-            html += `<span class="wrap"><a href="${solutionLink}" target=_blank>Solution</a>&nbsp(${getMovesCount(s)}):&nbsp<span class="copyable" title="Click to copy solution to clipboard">${convertSolution(s)}</span></span>`;
+            html += `<span class="wrap"><a href="${getSolutionLink(name,true)}" target=_blank>Solution</a>&nbsp(${getMovesCount(s)}):&nbsp<span class="copyable" title="Click to copy solution to clipboard">${convertSolution(s)}</span></span>`;
           }
           wrapper.innerHTML = html;
           return wrapper;
