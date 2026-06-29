@@ -691,7 +691,7 @@ MirrorCrate = NormalCrate or ReflectableCrate
 
 Pushable = Mirror or MirrorCrate
 
-Solid = MirrorCrate or Mirror or MirrorGuy
+Solid = MirrorCrate or Mirror or Hero
 
 Reflectable = MirrorGuy or ReflectableCrate
 
@@ -798,7 +798,7 @@ WaterAnim
 CrateInHole
 Warpball, Dying
 Switch, OpenDoor, ShadowDoor, HasSavedDoor
-ClosedDoor, Hero, Crate, Wall, Monster, Corpse, Bush, FrozenMonster
+ClosedDoor, Crate, Wall, Monster, Corpse, Bush, FrozenMonster, Solid
 Saved
 RFireball
 LFireball
@@ -811,7 +811,7 @@ Target, FloatingBody
 HasReflection, Hint
 AddLandL, RemoveLandL
 AddLandR, RemoveLandR
-Solid, LOS
+LOS
 Counter
 DirectionCounter
 Reflection, CantMove, CrateReflection
