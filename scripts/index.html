@@ -27,8 +27,14 @@ body { padding: 0; margin: 0; }
   height: 15%;
   width: 80%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+#subtitle {
+  display: block;
+  font-size: 16px;
 }
 
 .footer {
@@ -210,7 +216,7 @@ body { padding: 0; margin: 0; }
 </div>
 
 <div class="container">
-  <div class="header"><span id="title"></span></div>
+  <div class="header"><div id="title"></div><div id="subtitle"></div></div>
   <canvas id="gameCanvas"></canvas>
   <div class="footer">
     <button class="btn btnFn" id="prevMove" title="prev">[</button>
@@ -241,12 +247,14 @@ let puzzleScript = null;
 let solutions = {};
 let cleanedData = null;
 let name = 'heroes1_1';
+let todoNote = '';
 let timer = null;
 let previousRef = -1;
 let pos = 0;
 let playDelay = 150;
 let levelRanges = {};
 let levelNames = {};
+let todoRanges = {};
 let paused = false;
 
 const unpackSolution = s => s.replace(/([A-Z])(\d+)/g, (_,l,n)=>l.repeat(+n));
@@ -387,6 +395,8 @@ function updateTitle(name) {
   document.getElementById('title').textContent = `${name}`;
   //document.getElementById('title').textContent = `(${Math.ceil(i*101/n)}%) ${name}`;
 
+  document.getElementById('subtitle').textContent = `${todoNote}`;
+
   document.getElementById('map_link').href = `../index.html#${name}`;
 
   updateState('#prevLevel', i!=0);
@@ -445,12 +455,12 @@ function lastLevel(){
   stepLevel(9999);
 }
 
-function extractLevelNames(sourceText) {
+function extractRanges(sourceText, prefix, limit = Infinity) {
   const lines = sourceText.split('\n');
   const labels = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const match = lines[i].match(/^\s*\(level\s*(.+?)\)\s*$/i);
+    const match = lines[i].match(new RegExp(`^\\s*\\(${prefix}\\s*(.+?)\\)\\s*$`, 'i'));
     if (match) {
       labels.push({ line: i + 1, name: match[1] }); // 1-indexed to match PS lineNumber convention
     }
@@ -462,13 +472,15 @@ function extractLevelNames(sourceText) {
   // build ranges: [thisLabel.line, nextLabel.line) -> name
   const ranges = labels.map((label, idx) => {
     const nextLine = idx + 1 < labels.length ? labels[idx + 1].line : Infinity;
-    return { start: label.line, end: nextLine, name: label.name };
+    const end = Math.min(nextLine, label.line + limit);
+    return { start: label.line, end: end, name: label.name };
   });
 
   return ranges;
 }
 
-function lookupLevelName(ranges, lineNumber) {
+
+function lookupRange(ranges, lineNumber) {
   for (const r of ranges) {
     if (lineNumber >= r.start && lineNumber < r.end) {
       return r.name;
@@ -480,7 +492,14 @@ function lookupLevelName(ranges, lineNumber) {
 function monitorLevelUpdate() {
   if (window.level.lineNumber !== previousRef) {
     previousRef = window.level.lineNumber;
-    const levelName = lookupLevelName(levelRanges, previousRef);
+    const levelName = lookupRange(levelRanges, previousRef);
+
+
+    todoNote = lookupRange(todoRanges, previousRef)||'';
+
+    console.log(todoNote);
+
+
     console.log(`New level event, line ${previousRef}, possibly "${levelName}".`);
     if (levelName) {
       onLevelLoaded(levelName);
@@ -622,7 +641,10 @@ window.onload = () => {
     puzzleScript = new PuzzleScript();
     //puzzleScript.compile(cleanedData);
 
-    levelRanges = extractLevelNames(cleanedData);
+    levelRanges = extractRanges(cleanedData, 'level');
+
+    todoRanges = extractRanges(cleanedData, 'TODO:', 10);
+
     levelNames = levelRanges.map(r => r.name);
 
     console.log(`Loaded ${levelNames.length} levels.`);
