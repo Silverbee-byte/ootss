@@ -88,6 +88,7 @@ body { padding: 0; margin: 0; }
 }
 
 .btn {
+  flex-shrink: 0;
   padding-top: 2px;
   margin-top: 2px;
   width: 55px;
@@ -171,8 +172,6 @@ body { padding: 0; margin: 0; }
   <button class="btn btnFn" id="nextLevel" title="next">3</button>
   <button class="btn btnFn" id="lastLevel" title="last">4</button>
   <br>
-  <button class="btn btnFn" id="solve" title="solve">E</button>
-  <button class="btn btnFn" id="reset" title="reset">R</button>
 </div>
 
 <div class="controls top right pr">
@@ -219,11 +218,13 @@ body { padding: 0; margin: 0; }
   <div class="header"><div id="title"></div><div id="subtitle"></div></div>
   <canvas id="gameCanvas"></canvas>
   <div class="footer">
+    <button class="btn btnFn" id="reset" title="reset">R</button>
     <button class="btn btnFn" id="prevMove" title="prev">[</button>
       <span id="moves">
         <span id="moves-before"></span>[<span id="moves-at"></span>]<span id="moves-after"></span>
       </span>
     <button class="btn btnFn" id="nextMove" title="prev">]</button>
+    <button class="btn btnFn" id="solve" title="solve">E</button>
   </div>
 </div>
 
