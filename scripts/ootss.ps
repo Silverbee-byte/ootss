@@ -848,7 +848,7 @@ WaterAnim
 CrateInHole
 Warpball, Dying
 Switch, OpenDoor, ShadowDoor, HasSavedDoor
-ClosedDoor, Crate, Monster, Corpse, Bush, FrozenMonster, Solid
+Crate, ClosedDoor, Monster, Corpse, Bush, FrozenMonster, Solid
 Saved
 RFireball
 LFireball
@@ -1204,6 +1204,10 @@ endloop
 [ Action Bard] [SPriest] -> [SBard] [Priest Sfx1]
 [ Action Druid] [SBard] -> [SDruid] [Bard Sfx1]
 
+
+[ Action Thief] [SThief] -> [SThief] [Thief Sfx1] (quadrants_follow_up)
+
+
 (Bard plays music. This is my favorite part of the code, btw. Yes, you can make square area effects with just one object!)
 [no Note | no Note | Bard] -> [^ Note | ^ Note | Bard]
 [no Note | Bard] -> [^ Note | Bard]
@@ -1252,24 +1256,29 @@ late [ColorDoor no DoorMarker no InvDoorMarker] -> [ColorDoor DoorMarker]
 late [ColorOpen no DoorMarker no InvDoorMarker] -> [ColorOpen InvDoorMarker]
 
 late [Weighing YellowSwitch] [YellowDoor DoorMarker] -> [Weighing YellowSwitch] [YellowOpen DoorMarker] Sfx3
-late [YellowSwitch no Weighing] [YellowOpen DoorMarker] -> [YellowSwitch] [YellowDoor DoorMarker] Sfx2
+late [YellowSwitch no Weighing] [YellowOpen DoorMarker Crate] -> [YellowSwitch] [CrateInHole DoorMarker]
+late [YellowSwitch no Weighing] [YellowOpen DoorMarker no Crate] -> [YellowSwitch] [YellowDoor DoorMarker] Sfx2
 late [Weighing YellowSwitch] [YellowOpen InvDoorMarker] -> [Weighing YellowSwitch] [YellowDoor InvDoorMarker] Sfx2
 late [YellowSwitch no Weighing] [YellowDoor InvDoorMarker] -> [YellowSwitch] [YellowOpen InvDoorMarker] Sfx3
 
 late [Weighing BlueSwitch] [BlueDoor DoorMarker] -> [Weighing BlueSwitch] [BlueOpen DoorMarker] Sfx3
-late [BlueSwitch no Weighing] [BlueOpen DoorMarker] -> [BlueSwitch] [BlueDoor DoorMarker] Sfx2
+late [BlueSwitch no Weighing] [BlueOpen DoorMarker Crate] -> [BlueSwitch] [CrateInHole DoorMarker]
+late [BlueSwitch no Weighing] [BlueOpen DoorMarker no Crate] -> [BlueSwitch] [BlueDoor DoorMarker] Sfx2
 late [Weighing BlueSwitch] [BlueOpen InvDoorMarker] -> [Weighing BlueSwitch] [BlueDoor InvDoorMarker] Sfx2
 late [BlueSwitch no Weighing] [BlueDoor InvDoorMarker] -> [BlueSwitch] [BlueOpen InvDoorMarker] Sfx3
 
 late [Weighing PurpleSwitch] [PurpleDoor DoorMarker] -> [Weighing PurpleSwitch] [PurpleOpen DoorMarker] Sfx3
-late [PurpleSwitch no Weighing] [PurpleOpen DoorMarker] -> [PurpleSwitch] [PurpleDoor DoorMarker] Sfx2
+late [PurpleSwitch no Weighing] [PurpleOpen DoorMarker Crate] -> [PurpleSwitch] [CrateInHole DoorMarker]
+late [PurpleSwitch no Weighing] [PurpleOpen DoorMarker no Crate] -> [PurpleSwitch] [PurpleDoor DoorMarker] Sfx2
 late [Weighing PurpleSwitch] [PurpleOpen InvDoorMarker] -> [Weighing PurpleSwitch] [PurpleDoor InvDoorMarker] Sfx2
 late [PurpleSwitch no Weighing] [PurpleDoor InvDoorMarker] -> [PurpleSwitch] [PurpleOpen InvDoorMarker] Sfx3
 
 late [Weighing GreenSwitch] [GreenDoor DoorMarker] -> [Weighing GreenSwitch] [GreenOpen DoorMarker] Sfx3
-late [GreenSwitch no Weighing] [GreenOpen DoorMarker] -> [GreenSwitch] [GreenDoor DoorMarker] Sfx2
+late [GreenSwitch no Weighing] [GreenOpen DoorMarker Crate] -> [GreenSwitch] [CrateInHole DoorMarker]
+late [GreenSwitch no Weighing] [GreenOpen DoorMarker no Crate] -> [GreenSwitch] [GreenDoor DoorMarker] Sfx2
 late [Weighing GreenSwitch] [GreenOpen InvDoorMarker] -> [Weighing GreenSwitch] [GreenDoor InvDoorMarker] Sfx2
 late [GreenSwitch no Weighing] [GreenDoor InvDoorMarker] -> [GreenSwitch] [GreenOpen InvDoorMarker] Sfx3
+
 
 (monster door)
 
@@ -2648,12 +2657,10 @@ _________
 
 (level quadrants_follow_up)
 
-(TODO needs 2 thiefs, needs crates sinkable in doors)
-
 ____________________
 _....._..,..__....._
 _..T..].....;;..G.*_
-_}....].....;;....._
+_}....]....*;;....._
 _..2..].....;;..G.*_
 _....._.....__....._
 ____________________
