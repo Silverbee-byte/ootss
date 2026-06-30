@@ -1262,8 +1262,7 @@ late [ColorDoor no DoorMarker no InvDoorMarker] -> [ColorDoor DoorMarker]
 late [ColorOpen no DoorMarker no InvDoorMarker] -> [ColorOpen InvDoorMarker]
 
 late [Weighing YellowSwitch] [YellowDoor DoorMarker] -> [Weighing YellowSwitch] [YellowOpen DoorMarker] Sfx3
-late [YellowSwitch no Weighing] [YellowOpen DoorMarker Crate] -> [YellowSwitch] [CrateInHole DoorMarker]
-late [YellowSwitch no Weighing] [YellowOpen DoorMarker no Crate] -> [YellowSwitch] [YellowDoor DoorMarker] Sfx2
+late [YellowSwitch no Weighing] [YellowOpen DoorMarker] -> [YellowSwitch] [YellowDoor DoorMarker] Sfx2
 late [Weighing YellowSwitch] [YellowOpen InvDoorMarker] -> [Weighing YellowSwitch] [YellowDoor InvDoorMarker] Sfx2
 late [YellowSwitch no Weighing] [YellowDoor InvDoorMarker] -> [YellowSwitch] [YellowOpen InvDoorMarker] Sfx3
 
