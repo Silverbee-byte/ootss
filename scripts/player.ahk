@@ -445,7 +445,6 @@ StepNextMove() {
     global stepIndex, stepSequence, stepActive
     if !stepActive {
         StartStepPlayback()
-        return
     }
     if (stepIndex >= StrLen(stepSequence)) {
         ToolTip("End of solution!")
