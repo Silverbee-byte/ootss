@@ -16,6 +16,21 @@ transparent
 Switched
 transparent
 
+WaterSeed
+transparent
+
+RayU
+transparent
+
+RayD
+transparent
+
+RayL
+transparent
+
+RayR
+transparent
+
 MirrorBackground
 #dfcc4f yellow
 11111
@@ -723,6 +738,9 @@ Invulnerable = Crate or Static
 WaterAnim = WaterAnim1 or WaterAnim2
 Background = HeroBackground
 
+OpenTrap = YellowOpen or PurpleOpen or BlueOpen or GreenOpen
+ClosedTrap = PurpleDoor or YellowDoor or BlueDoor or GreenDoor
+
 (mirror defines)
 
 Mirror = MirrorUL or MirrorUR or MirrorDL or MirrorDR
@@ -776,8 +794,7 @@ $ = GreenDoor
 - = GreenOpen
 + = GreenSwitch
 
-
-(% = )
+% = WaterSeed
 
 (no more characters left - |,<>,[] - give warnings)
 
@@ -845,6 +862,12 @@ COLLISIONLAYERS
 Background
 MirrorBackground
 
+WaterSeed
+RayU
+RayD
+RayL
+RayR
+
 (heroes layers)
 Goal
 DoorMarker, InvDoorMarker
@@ -876,6 +899,28 @@ Reflection, CantMove, CrateReflection
 ======
 RULES
 ======
+
+(paint water cross from waterseed for trapdoors)
+
+[ WaterSeed ] -> [ Hole WaterAnim1 RayU RayD RayL RayR ]
+
+up    [ RayU | ] -> [ RayU | Hole WaterAnim1 RayU ]
+down  [ RayD | ] -> [ RayD | Hole WaterAnim1 RayD ]
+left  [ RayL | ] -> [ RayL | Hole WaterAnim1 RayL ]
+right [ RayR | ] -> [ RayR | Hole WaterAnim1 RayR ]
+
+[ RayU ] -> [ RayU ] again
+[ RayD ] -> [ RayD ] again
+[ RayL ] -> [ RayL ] again
+[ RayR ] -> [ RayR ] again
+
+late [ RayU ] -> []
+late [ RayD ] -> []
+late [ RayL ] -> []
+late [ RayR ] -> []
+late [ WaterSeed ] -> []
+
+
 (mirror rules)
 
 [ > MirrorGuy ] [ Hint ] -> [ > MirrorGuy ] [ action Hint ]
@@ -2648,15 +2693,14 @@ _____________
 (level quadrants)
 
 (TODO trapdoors for wizard to swap through)
-
 _________
 _T.3_G.G_
 _.}._..._
 _..._..._
-_[[[_;;;_
-_...]..._
-_.,.].{._
-_*..]..._
+_&&&%:::_
+_...?..._
+_.,.?.{._
+_*..?..._
 _________
 
 
@@ -2673,6 +2717,7 @@ ____________________
 
 (level drowner)
 
+___________________
 _______###_________
 _______#_#_________
 _______#.#_________
@@ -2681,14 +2726,14 @@ ____#...O...#______
 ____#...*...#______
 _####.......######_
 _#_..O*.._.O.*FMG#_
-_#_##.......######_
+_####.......######_
 ____#...*...#______
 ____#...O...#______
 ____####*####______
 _______#.#_________
 _______#_#_________
 _______###_________
-
+___________________
 
 
 (level surrounded)
