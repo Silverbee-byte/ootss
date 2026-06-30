@@ -41,7 +41,9 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  justify-content: flex-start;
+  /*justify-content: flex-start;*/
+
+  justify-content: center;
   align-items: center;
   padding: 16px;
   flex-shrink: 0;
@@ -65,16 +67,13 @@ html, body {
   min-height: 100px;
   max-height: 100px;
   display: flex;
-  align-items: flex-end;
+  /*align-items: flex-end;*/
+  align-items: center;
   justify-content: center;
   color: #888;
   padding: 16px;
   flex-shrink: 0;
 }
-
-
-#play { width: 120px; }
-
 
 .btn-prev:after {
   content: '❮';
@@ -191,10 +190,12 @@ html, body {
 <title>Solution Player</title>
 
 <div class="controls top left">
-  <button class="btn btnFn" id="firstLevel" title="first">1</button>
-  <button class="btn btnFn" id="prevLevel" title="prev">2</button>
-  <button class="btn btnFn" id="nextLevel" title="next">3</button>
-  <button class="btn btnFn" id="lastLevel" title="last">4</button>
+  <button class="btn btnFn" id="reset" title="Reset">R</button>
+  <button class="btn btnFn" id="play" title="Play">E</button>
+  <a href="../index.html" id="map_link" target=_blank><button class="btn" title="pin">&#x1F4CC;</button></a>
+  <br>
+  <button class="btn btnFn" id="prevMove" title="Previous Move">[</button>
+  <button class="btn btnFn" id="nextMove" title="Next Move">]</button>
   <br>
 </div>
 
@@ -224,18 +225,14 @@ html, body {
   <br>
   <br>
   <br>
-  <!--button class="btn btnFn" id="pin" title="pin">&#x1F4CC;</button-->
-
-  <a href="../index.html" id="map_link" target=_blank><button class="btn" title="pin">&#x1F4CC;</button></a>
-
 </div>
 
 <div class="controls left middle">
-  <button class="btn btnFn btn-prev" id="prevLevel" title="prev"></button>
+  <button class="btn btnFn btn-prev" id="prevLevel" title="PageUp - previous, Home - first"></button>
 </div>
 
 <div class="controls right middle">
-  <button class="btn btnFn btn-next" id="nextLevel" title="next"></button>
+  <button class="btn btnFn btn-next" id="nextLevel" title="PageDown - next, End - last"></button>
 </div>
 
 <div class="container">
@@ -244,15 +241,10 @@ html, body {
 
   <canvas id="gameCanvas"></canvas>
 
-
   <div class="footer">
-    <button class="btn btnFn" id="reset" title="reset">R</button>
-    <button class="btn btnFn" id="prevMove" title="prev">[</button>
       <span id="moves">
         <span id="moves-before"></span>[<span id="moves-at"></span>]<span id="moves-after"></span>
       </span>
-    <button class="btn btnFn" id="nextMove" title="prev">]</button>
-    <button class="btn btnFn" id="solve" title="solve">E</button>
   </div>
 </div>
 
@@ -665,15 +657,16 @@ window.onload = () => {
           break;
 
 
-        case 'Home': reset(); break;
-        case 'PageUp': stepLevel(-1); break;
-        case 'PageDown': stepLevel(1); break;
+        case 'Home': firstLevel(); break;
+        case 'PageUp': prevLevel(); break;
+        case 'PageDown': nextLevel(); break;
+        case 'End': lastLevel(); break;
 
         case 'KeyZ':
-          if (e.shiftKey) stepLevel(-1);
+          if (e.shiftKey) prevLevel();
           break;
         case 'KeyX':
-          if (e.shiftKey) stepLevel(1);
+          if (e.shiftKey) nextLevel();
           break;
 
         case 'KeyE':
@@ -688,12 +681,6 @@ window.onload = () => {
           updateSolution();
         break;
 
-
-        case 'Digit1': firstLevel(); break;
-        case 'Digit2': prevLevel(); break;
-        case 'Digit3': nextLevel(); break;
-        case 'Digit4': lastLevel(); break;
-          
         default:
           break;
       }
