@@ -1227,9 +1227,7 @@ Late [Goblin | Vulnerable] -> [Goblin | Dying Vulnerable]
 (Custom block about dragons and holes)
 
 [ Switched ] [ DragonLeft ]  -> [ Switched ] [ DragonLeft Switched ]
-
-Late [DragonLeft no Switched ] -> [LFireball DragonLeft]
-
+Late [DragonLeft no Switched ] -> [LFireball DragonLeft] (prevent frying up the goblin in one_fire_v2 after character switching)
 Late [DragonRight] -> [RFireball DragonRight]
 Late RIGHT [RFireball | No Vulnerable no Invulnerable] -> [ | RFireball]
 Late LEFT [LFireball | No Vulnerable no Invulnerable] -> [ | LFireball]
