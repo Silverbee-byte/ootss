@@ -381,7 +381,6 @@ function playSolution() {
   updateSolution();
   if (!timer) {
     timer = setInterval(sendNextMove, playDelay);
-    //document.getElementById('play').textContent = 'Pause (E)';
   }
 }
 
@@ -391,11 +390,10 @@ function pauseSolution() {
     clearInterval(timer);
     timer = null;
     console.log('Paused.');
-    //document.getElementById('play').textContent = 'Solve (E)';
   }
 }
 
-function solve() {
+function play() {
   if (!timer) {
     playSolution();
   } else {
@@ -669,7 +667,7 @@ window.onload = () => {
           break;
 
         case 'KeyE':
-          solve();
+          play();
           break;
 
         case 'KeyW': case 'ArrowUp':
