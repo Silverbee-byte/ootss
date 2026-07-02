@@ -617,8 +617,10 @@ function sendNextMove() {
       console.warn(`Unknown symbol '${ch}' at position ${pos}, skipping`);
       pos++;
     }
+
+    if (pos==solution.length-1) console.log('Solution complete.');
+
   } else {
-    console.log('Solution complete.');
     pauseSolution();
   }
 
