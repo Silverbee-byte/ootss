@@ -315,11 +315,11 @@ function move(id) {
 }
 
 function pin() {
-  window.location.href = `../index.html#${name}`;
+  window.location.href = `index.html#${name}`;
 }
 
 function close() {
-  window.location.href = `../index.html`;
+  window.location.href = `index.html`;
 }
 
 function nextMove() {
@@ -426,7 +426,7 @@ function updateTitle(name) {
     document.getElementById('subtitle').textContent = ``;
   }
 
-  document.getElementById('map_link').href = `../index.html#${name}`;
+  document.getElementById('map_link').href = `index.html#${name}`;
 
   updateState('#prevLevel', i!=0);
   updateState('#nextLevel', i!=n-1);
