@@ -740,6 +740,14 @@ Brown DarkBrown Blue
 01110
 20002
 
+MirrorInHole
+#909090 #4e5159 #4e5159 Blue
+33333
+30103
+31013
+30103
+33333
+
 =======
 LEGEND
 =======
@@ -753,6 +761,7 @@ Healer = Priest or SPriest (Unlike the other heroes, priests must function even 
 Monster =  Dragon or Goblin
 FrozenMonster = FrozenGoblin or FrozenDragonUp or FrozenDragonLeft or FrozenDragonRight or FrozenDragonDown
 Moveable = Crate or SPlayer or Monster or FrozenMonster
+BardMoveable = Crate or SPlayer or Monster or FrozenMonster or CrateInHole
 ClosedDoor = YellowDoor or PurpleDoor or BlueDoor or GreenDoor or MonsterDoor
 OpenDoor = YellowOpen or PurpleOpen or BlueOpen or GreenOpen
 Switch = PurpleSwitch or YellowSwitch or BlueSwitch or GreenSwitch
@@ -774,7 +783,7 @@ MirrorCrate = NormalCrate or ReflectableCrate
 Pushable = Mirror or MirrorCrate
 Solid = MirrorCrate or Mirror or Hero or Wall
 Reflectable = MirrorGuy or ReflectableCrate
-WaterHere = Hole or CrateInHole or FloatingBody
+WaterHere = Hole or CrateInHole or FloatingBody or MirrorInHole
 AddLandL = AddLandLUD or AddLandLU or AddLandLD
 AddLandR = AddLandRUD or AddLandRU or AddLandRD
 RemoveLandL = RemoveLandLUD or RemoveLandLU or RemoveLandLD
@@ -898,8 +907,8 @@ Basement
 Hole
 WaterAnim
 DoorSprite
-CrateInHole
 Warpball, Dying
+CrateInHole, MirrorInHole
 Switched
 Switch, OpenDoor, ShadowDoor, HasSavedDoor
 Crate, ClosedDoor, Monster, Corpse, Bush, FrozenMonster, Solid
@@ -1036,14 +1045,16 @@ down [ RemoveLandRD | no WaterHere ] -> [ | ]
 [ > MirrorGuy | Hole ] -> [ MirrorGuy | Hole ] sfx4
 
 [ >  MirrorGuy | MirrorCrate | no Solid ] -> [  >  MirrorGuy | > MirrorCrate | ] sfx1
-[ >  MirrorGuy | Mirror | no Hole no Solid ] -> [  >  MirrorGuy | > Mirror | ] sfx1
+[ >  MirrorGuy | Mirror | no Solid ] -> [  >  MirrorGuy | > Mirror | ] sfx1 (allow pushing mirror into the hole)
+
+[ > MirrorGuy | MirrorInHole ] -> [ MirrorGuy | MirrorInHole ] (stop mirrorguy from stepping on mirror in hole)
 
 [ > MirrorGuy | stationary Mirror | Hole ] -> [ MirrorGuy | Mirror | Hole ] sfx4
 
 [ >  MirrorGuy | MirrorCrate | > MirrorGuy ] -> [  >  MirrorGuy | > MirrorCrate | > MirrorGuy ] sfx1
 [ >  MirrorGuy | Mirror | > MirrorGuy ] -> [  >  MirrorGuy | > Mirror | > MirrorGuy ] sfx1
 
-[ > Mirror | Hole ] -> [ Mirror | Hole ] sfx4
+([ > Mirror | Hole ] -> [ Mirror | Hole ] sfx4)
 
 [ > Pushable | no Solid ] -> [ | Pushable ]
 + [ > MirrorGuy | no Solid ] -> [ | MirrorGuy ] sfx0
@@ -1051,9 +1062,12 @@ down [ RemoveLandRD | no WaterHere ] -> [ | ]
 [ > MirrorGuy ] -> [ MirrorGuy ] sfx4
 
 [ MirrorGuy Hole ] -> [ Hole ]
-[ Mirror Hole ] -> cancel
+
+([ Mirror Hole ] -> cancel)
+
 [ NormalCrate Hole ] -> [ CrateInHole ] sfx3
 [ ReflectableCrate Hole ] -> [ CrateInHole ] sfx3
+[ Mirror Hole ] -> [ MirrorInHole ] sfx3
 
 [ MirrorGuy ] [ HasReflection ] -> [ MirrorGuy ] []
 
@@ -1175,8 +1189,8 @@ endloop
 (Bard moves stuff. Reusing "WarpBall" for totally different purpose, so we can cancel the move if he doesn't move.)
 [> Bard no Note] -> [> Note > Bard WarpBall]
 [> Note] [Note] -> [> Note] [> Note]
-[> Note Moveable | no Static no Moveable no Bard] -> [| Moveable Sfx7]
-+[> Note Bard WarpBall| no Static no Moveable no Bard] -> [| Bard]
+[> Note BardMoveable | no Static no BardMoveable no Bard] -> [| BardMoveable Sfx7]
++[> Note Bard WarpBall| no Static no BardMoveable no Bard] -> [| Bard]
 
 (Why are we doing this pseudo-movement instead of using the built-in version? Because using movement directions makes the note-adding stuff way easier below, and you can't use movement directions in the LATE phase, so the actual moving has to be done before then.)
 
@@ -2621,7 +2635,7 @@ _____________________
 
 (level worlds_collide_heroes_and_mirrors_v3)
 
-(TODO: wizard and goblin mirroring, mirror sink)
+(TODO: wizard and goblin mirroring)
 
 __________________________
 ______________..._________
@@ -2896,13 +2910,13 @@ _____.______________
 ____..._____________
 ___.....____________
 ___.....____________
-__....w.____________
+__....3.____________
 __.....________..___
 _g..._________..._g_
 __.._________....___
 ___________......___
 __________.......___
 __________.......___
-_________..5....____
+_________..B....____
 _________......_____
 ____________________
