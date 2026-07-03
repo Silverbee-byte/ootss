@@ -223,7 +223,7 @@ html, body {
   <br>
   <br>
   <br>
-  <a href="index.html" id="map_link" target=_blank><button class="btn" title="pin">&#x1F4CC;</button></a>
+  <a href="./" id="map_link" target=_blank><button class="btn" title="pin">&#x1F4CC;</button></a>
 </div>
 
 <div class="controls left middle">
@@ -314,12 +314,17 @@ function move(id) {
   }
 }
 
+function getMapLink(name) {
+  let mapBase = location.protocol === 'file1:' ? 'index.html' : '';
+  return name ? mapBase + '#' + name : mapBase;
+}
+
 function pin() {
-  window.location.href = `index.html#${name}`;
+  window.location.href = getMapLink(name);
 }
 
 function close() {
-  window.location.href = `index.html`;
+  window.location.href = getMapLink();
 }
 
 function nextMove() {
@@ -426,7 +431,7 @@ function updateTitle(name) {
     document.getElementById('subtitle').textContent = ``;
   }
 
-  document.getElementById('map_link').href = `index.html#${name}`;
+  document.getElementById('map_link').href = getMapLink(name);
 
   updateState('#prevLevel', i!=0);
   updateState('#nextLevel', i!=n-1);
@@ -686,7 +691,7 @@ window.onload = () => {
 
   })();
 
-  fetch('../data/solutions.txt').then(r => r.text()).then(data => {
+  fetch('data/solutions.txt').then(r => r.text()).then(data => {
     solutions = Object.fromEntries(data.split('\n').map(s => s.trim().split(':', 2)).filter(([, v])=> v && v.length>=2));
     const a = Object.values(solutions).map(s=>s.length);
     if (a) {
