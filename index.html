@@ -76,6 +76,18 @@ html, body, #map { width:100%; height: 100%; margin: 0; padding: 0; overflow: hi
   border: 1px solid #888;
 }
 
+.region-label {
+  font-size: 32px;
+  color: white;
+  text-shadow: 1px 1px 8px black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: serif;
+  text-decoration: bold;
+  z-index: 9999;
+}
+
 .info-block {
   position: absolute;
   bottom: 0;
@@ -710,6 +722,55 @@ convertSolution = s => unpackSolution(s).toLowerCase().match(/.{1,5}/g)?.join(' 
 
 convertSolution = s => s
 
+function getCentroidRaw2(points) {
+    if (!points || points.length < 3) return null;
+    
+    // Ensure polygon is closed (last point = first point)
+    let closedPoints = [...points];
+    if (closedPoints[0][0] !== closedPoints[closedPoints.length-1][0] || 
+        closedPoints[0][1] !== closedPoints[closedPoints.length-1][1]) {
+        closedPoints.push([closedPoints[0][0], closedPoints[0][1], closedPoints[0][2] || 0]);
+    }
+    
+    let area = 0;
+    let centroidX = 0;
+    let centroidY = 0;
+    
+    for (let i = 0; i < closedPoints.length - 1; i++) {
+        const x1 = closedPoints[i][0];
+        const y1 = closedPoints[i][1];
+        const x2 = closedPoints[i + 1][0];
+        const y2 = closedPoints[i + 1][1];
+        
+        // Cross product for area contribution
+        const cross = x1 * y2 - x2 * y1;
+        area += cross;
+        
+        // Weighted sum for centroid
+        centroidX += (x1 + x2) * cross;
+        centroidY += (y1 + y2) * cross;
+    }
+    
+    area = area / 2;
+    
+    // Handle degenerate polygons (area = 0)
+    if (Math.abs(area) < 1e-10) {
+        // Fallback to simple vertex average
+        let sumX = 0, sumY = 0;
+        const count = points.length;
+        points.forEach(point => {
+            sumX += point[0];
+            sumY += point[1];
+        });
+        return [sumX / count, sumY / count, 0];
+    }
+    
+    centroidX = centroidX / (6 * area);
+    centroidY = centroidY / (6 * area);
+    
+    return [centroidX, centroidY, 0];
+}
+
 function drawMap() {
   // old map was 1920x1080 and the grid was almost precisely 10 pixels
   // center was at 860, 740
@@ -775,56 +836,39 @@ function drawMap() {
 
   markerGroup = L.layerGroup().addTo(map);
 
+  let regionLayer = L.layerGroup().addTo(map);
 
-/*
-  map.on('mousemove', function(e) {
-    let p = {x:e.latlng.lng, y:e.latlng.lat};
-    document.title = 'X:' + p.x.toFixed(0) + ' Y:' + p.y.toFixed(0);
-  });
-*/
-
-/*
-  map.on('click', e => {
-      var lng = e.latlng.lng;
-      var lat = e.latlng.lat;
-      let cellSize = 1;
-      let x = Math.round(lng / cellSize) * cellSize
-      let y = Math.round(lat / cellSize) * cellSize
-      let t = `[${x}, ${y}]`;
-      navigator.clipboard.writeText(t);
-      // Open popup
-      L.popup().setLatLng(e.latlng).setContent(t + '<br>(copied to clipboard)').openOn(map);
-
-      //console.log(t);
-  }); 
-*/
   polygonLayer = L.geoJSON(regionData, {
-
-      style: { color: 'white', weight: 1, fillOpacity: 0.25 },
-
       onEachFeature: (feature, layer) => {
-          //layer.bindPopup(feature.properties.title);
 
+        layer.setStyle({
+            color: feature.properties.color,
+            weight: 1,
+            fillOpacity: 0.25
+        });
 
         regionColors[feature.properties.name] = feature.properties.color;
 
-        // Hover effects
-        layer.on('mouseover', function(e) {
-            this.setStyle({
-                fillOpacity: 0.5,  // Increase opacity on hover
-                weight: 2,          // Thicker border
-            });
-            this.bringToFront();    // Bring to front
-        });
-        
-        layer.on('mouseout', function(e) {
-            this.setStyle({
-                fillOpacity: 0.25,   // Back to original opacity
-                weight: 1,           // Original border width
-            });
-        });
+        layer.on('mouseover', function(e) { this.setStyle({ fillOpacity: 0.5, weight: 2,}); this.bringToFront(); });
+        layer.on('mouseout', function(e) { this.setStyle({ fillOpacity: 0.25, weight: 1, })});
 
-      }
+
+        let c = getCentroidRaw2(feature.geometry.coordinates[0]);
+
+
+        console.log(c);
+
+        L.marker([c[1],c[0]], {
+            icon: L.divIcon({
+                className: 'region-label',
+                html: feature.properties.title,
+                iconSize: [500, 100],
+                iconAnchor: [250, 50],
+            }),
+            zIndexOffset: 1000,
+        }).addTo(regionLayer);
+
+      },
   });//.addTo(map);
 
 
@@ -854,8 +898,9 @@ function drawMap() {
     layers['overworld'] = imageLayer2;
 
 
-    layers['regions'] = polygonLayer;
+    layers['polygons'] = polygonLayer;
 
+    layers['regions'] = regionLayer;
 
     images = [];
 
