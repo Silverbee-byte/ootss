@@ -1347,7 +1347,7 @@
       },
       "properties": {
         "type": "level",
-        "area": "mixed",
+        "area": "mixture",
         "name": "worlds_collide_heroes_and_mirrors_v3"
       }
     },
