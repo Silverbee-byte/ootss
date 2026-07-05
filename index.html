@@ -57,7 +57,7 @@ html, body, #map { width:100%; height: 100%; margin: 0; padding: 0; overflow: hi
 
 .marker-label {
   position: absolute;
-  bottom: -28px;
+  bottom: -32px;
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
@@ -500,7 +500,7 @@ let baseIcon = (feature) => {
     className: 'divIcon',
     html: getIconHTML(feature, size),
     iconSize:     [size, size], // size of the icon
-    iconAnchor:   [size/2, size], // point of the icon which will correspond to marker's location
+    iconAnchor:   [size/2, size-5], // point of the icon which will correspond to marker's location
     popupAnchor:  [0, -size*1.1], // point from which the popup should open relative to the iconAnchor
   });
 };
