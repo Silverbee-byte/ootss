@@ -91,9 +91,11 @@ html, body, #map { width:100%; height: 100%; margin: 0; padding: 0; overflow: hi
 
 .info-block {
   position: absolute;
-  bottom: 0;
+  bottom: 16px;
+  /*
   left: 50%;
   transform: translateX(-50%);
+  */
   z-index: 5000;
   padding: 12px;
   font-size: 14px;
@@ -1081,6 +1083,8 @@ function drawMap() {
 
     // mini map
 
+    /*
+
     let t = 1.25;
 
     var miniMapLayer = L.tileLayer('tiles/{z}/{y}/{x}.webp', {
@@ -1137,6 +1141,7 @@ function drawMap() {
     if (name) {
       focusMarkerByName(name);
     }
+    */
 
   })
 
