@@ -146,9 +146,8 @@ html, body {
 
 .pr { right: 60px }
 
-
-
 #moves {
+  visibility: hidden;
   display: flex;
   align-items: baseline;
   font-family: Arial, sans-serif;
@@ -314,6 +313,10 @@ function move(id) {
   }
 }
 
+function showSolution() {
+  document.getElementById('moves').style.visibility = 'visible';
+}
+
 function getMapLink(name) {
   let mapBase = location.protocol === 'file:' ? 'index.html' : './';
   return name ? mapBase + '#' + name : mapBase;
@@ -364,6 +367,7 @@ function prevMove() {
 }
 
 function updateSolution() {
+
   let solution = (convertSolution(solutions[name]||'')).toUpperCase();
 
   let at = solution[pos] || ' ';
@@ -375,7 +379,6 @@ function updateSolution() {
     before='';
     after='';
   }
-
 
   document.getElementById('moves-before').textContent = before;
   document.getElementById('moves-at').textContent = at;
@@ -642,10 +645,12 @@ window.onload = () => {
 
       switch (e.code) {
         case 'BracketRight':
+          showSolution();
           e.preventDefault();
           nextMove();
           break;
         case 'BracketLeft':
+          showSolution();
           e.preventDefault();
           prevMove();
           break;
@@ -673,6 +678,7 @@ window.onload = () => {
           break;
 
         case 'KeyE':
+          showSolution();
           play();
           break;
 
