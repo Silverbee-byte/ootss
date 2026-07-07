@@ -197,11 +197,11 @@ Orange Brown White
 .000.
 
 ReflectableCrate
-Red Pink Pink
+Pink Red
 .000.
-01210
-02220
-01210
+01110
+01110
+01110
 .000.
 
 
@@ -314,7 +314,7 @@ HeroBackground
 00010
 00000
 
-Goal 
+Goal
 Brown Yellow
 .000.
 00000
@@ -793,6 +793,8 @@ ColorDoor   = YellowDoor   or BlueDoor   or PurpleDoor   or GreenDoor
 ColorOpen   = YellowOpen   or BlueOpen   or PurpleOpen   or GreenOpen
 ColorSwitch = YellowSwitch or BlueSwitch or PurpleSwitch or GreenSwitch
 
+Exit = Goal or Target
+
 (single letter defines for levels)
 
 . = Background
@@ -973,6 +975,8 @@ late [ WaterAnim no Hole ] -> []
 (if there's a mirror on the map, replace background with mirrorbackground)
 
 late [ Mirror ] [ HeroBackground ] -> [ Mirror ] [ MirrorBackground ]
+
+late [ Mirror ] [ Goal ] -> [ Mirror ] [ Target ]
 
 (Island border)
 
@@ -1372,8 +1376,8 @@ late [ GreenOpen no Basement ] -> [ GreenOpen GreenOpenA ]
 WINCONDITIONS
 ==============
 
-All Hero on Goal
-All Goal on Hero
+All Hero on Exit
+All Exit on Hero
 
 =======
 LEVELS
