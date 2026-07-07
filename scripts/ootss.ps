@@ -8,6 +8,9 @@ run_rules_on_level_start
 OBJECTS
 ========
 
+BardMark
+transparent
+
 (mirror isles stuff)
 
 Teleported
@@ -909,6 +912,7 @@ Hole
 WaterAnim
 DoorSprite
 Warpball, Dying
+BardMark
 CrateInHole, MirrorInHole
 Switched
 Switch, OpenDoor, ShadowDoor, HasSavedDoor
@@ -1197,10 +1201,29 @@ endloop
 (I mean, theoretically you could write some horrid dragon breath timing puzzle where the ability to delay an extra turn without moving or switching characters is necessary in order to let you move someone else at the correct moment, but even if dragons still existed, that sounds like a really gross level.)
 
 (Bard moves stuff. Reusing "WarpBall" for totally different purpose, so we can cancel the move if he doesn't move.)
+
+(
 [> Bard no Note] -> [> Note > Bard WarpBall]
 [> Note] [Note] -> [> Note] [> Note]
 [> Note BardMoveable | no Static no BardMoveable no Bard] -> [| BardMoveable Sfx7]
 +[> Note Bard WarpBall| no Static no BardMoveable no Bard] -> [| Bard]
+)
+
+
+[> Bard no Note no CrateInHole] -> [> Note > Bard BardMark]
+[> Note] [Note] -> [> Note] [> Note]
+
+[ > Bard | CrateInHole ] -> [ > Bard | CrateInHole ]
+
+[> Note BardMoveable no CrateInHole | no Static no BardMoveable no Bard] -> [| BardMoveable Sfx7]
++[> Note Bard BardMark| no Static no BardMoveable no Bard] -> [| Bard]
+
+[> Note Crate | Hole no Static no BardMoveable no Bard] -> [| CrateInHole Sfx7]
++[> Note Bard BardMark| no Static no BardMoveable no Bard] -> [| Bard]
+
+[> Note CrateInHole | WaterHere no Static no BardMoveable no Bard] -> [Hole WaterAnim1 | CrateInHole Sfx7]
++[> Note Bard BardMark| no Static no BardMoveable no Bard] -> [| Bard]
+
 
 (Why are we doing this pseudo-movement instead of using the built-in version? Because using movement directions makes the note-adding stuff way easier below, and you can't use movement directions in the LATE phase, so the actual moving has to be done before then.)
 
@@ -1332,7 +1355,7 @@ late [Saved] [Healer no WarpBall] -> [Saved Sfx4] [Healer]
 late [HasSavedDoor] -> [Goal]
 late [WarpBall] -> []
 
-late [Note no Moveable] -> []
+late [Note no BardMoveable] -> []
 
 late [Saved no Hero] -> [] (NB! removes cross from non-hero cells. re-check if truly works)
 
@@ -2891,12 +2914,7 @@ ____________________
 #################
 
 
-
-
-
 (level easy_situation_v2)
-
-(TODO charmed crates vs water)
 
 __________
 ________G_
@@ -2911,9 +2929,6 @@ __________
 
 
 (level one_vs_three)
-
-(TODO charmed crates vs water)
-
 ____________________
 _____*______________
 _____.______________
