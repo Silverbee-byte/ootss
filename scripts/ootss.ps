@@ -10,6 +10,9 @@ OBJECTS
 
 (mirror isles stuff)
 
+OutCounter
+transparent
+
 Teleported
 transparent
 
@@ -90,6 +93,39 @@ transparent
 transparent
 
 09
+transparent
+
+10
+transparent
+
+11
+transparent
+
+12
+transparent
+
+13
+transparent
+
+14
+transparent
+
+15
+transparent
+
+16
+transparent
+
+17
+transparent
+
+18
+transparent
+
+19
+transparent
+
+20
 transparent
 
 
@@ -777,7 +813,7 @@ DoorSprite = YellowOpenA or PurpleOpenA or BlueOpenA or GreenOpenA or PurpleDoor
 (mirror defines)
 
 Mirror = MirrorUL or MirrorUR or MirrorDL or MirrorDR
-Counter = 00 or 01 or 02 or 03 or 04 or 05 or 06 or 07 or 08 or 09
+Counter = 00 or 01 or 02 or 03 or 04 or 05 or 06 or 07 or 08 or 09 or 10 or 11 or 12 or 13 or 14 or 15 or 16 or 17 or 18 or 19 or 20
 DirectionCounter = North or South or East or West
 MirrorCrate = NormalCrate or ReflectableCrate
 Pushable = Mirror or MirrorCrate
@@ -936,6 +972,7 @@ AddLandL, RemoveLandL
 AddLandR, RemoveLandR
 LOS
 Counter
+OutCounter
 DirectionCounter
 Reflection, CantMove, CrateReflection
 
@@ -1100,41 +1137,253 @@ random [ Reflectable no DirectionCounter ] -> [ action Reflectable North left 00
 + [ Reflectable East ] -> [ action Reflectable South up 00 ]
 + [ Reflectable South ] -> [ action Reflectable West down 00 ]
 
-[ > 00 | no Solid ] -> [ | > 01 LOS ]
-[ > 01 | no Solid ] -> [ | > 02 LOS ]
-[ > 02 | no Solid ] -> [ | > 03 LOS ]
-[ > 03 | no Solid ] -> [ | > 04 LOS ]
-[ > 04 | no Solid ] -> [ | > 05 LOS ]
-[ > 05 | no Solid ] -> [ | > 06 LOS ]
-[ > 06 | no Solid ] -> [ | > 07 LOS ]
-[ > 07 | no Solid ] -> [ | > 08 LOS ]
-[ > 08 | no Solid ] -> [ | > 09 LOS ]
+[ > 00 no OutCounter | no Solid ] -> [ | > 01 LOS ]
+[ > 01 no OutCounter | no Solid ] -> [ | > 02 LOS ]
+[ > 02 no OutCounter | no Solid ] -> [ | > 03 LOS ]
+[ > 03 no OutCounter | no Solid ] -> [ | > 04 LOS ]
+[ > 04 no OutCounter | no Solid ] -> [ | > 05 LOS ]
+[ > 05 no OutCounter | no Solid ] -> [ | > 06 LOS ]
+[ > 06 no OutCounter | no Solid ] -> [ | > 07 LOS ]
+[ > 07 no OutCounter | no Solid ] -> [ | > 08 LOS ]
+[ > 08 no OutCounter | no Solid ] -> [ | > 09 LOS ]
+[ > 09 no OutCounter | no Solid ] -> [ | > 10 LOS ]
+[ > 10 no OutCounter | no Solid ] -> [ | > 11 LOS ]
+[ > 11 no OutCounter | no Solid ] -> [ | > 12 LOS ]
+[ > 12 no OutCounter | no Solid ] -> [ | > 13 LOS ]
+[ > 13 no OutCounter | no Solid ] -> [ | > 14 LOS ]
+[ > 14 no OutCounter | no Solid ] -> [ | > 15 LOS ]
+[ > 15 no OutCounter | no Solid ] -> [ | > 16 LOS ]
+[ > 16 no OutCounter | no Solid ] -> [ | > 17 LOS ]
+[ > 17 no OutCounter | no Solid ] -> [ | > 18 LOS ]
+[ > 18 no OutCounter | no Solid ] -> [ | > 19 LOS ]
+[ > 19 no OutCounter | no Solid ] -> [ | > 20 LOS ]
 
 [ > Counter | Solid no Mirror ] -> [ | Solid ]
 
-left [ > Counter | MirrorUR ] -> [ | MirrorUR up Counter ]
-+ left [ > Counter | MirrorDR ] -> [ | MirrorDR down Counter ]
-+ right [ > Counter | MirrorUL ] -> [ | MirrorUL up Counter ]
-+ right [ > Counter | MirrorDL ] -> [ | MirrorDL down Counter ]
-+ up [ > Counter | MirrorDL ] -> [ | MirrorDL left Counter ]
-+ up [ > Counter | MirrorDR ] -> [ | MirrorDR right Counter ]
-+ down [ > Counter | MirrorUL ] -> [ | MirrorUL left Counter ]
-+ down [ > Counter | MirrorUR ] -> [ | MirrorUR right Counter ]
+left [ > Counter no OutCounter | MirrorUR ] -> [ | MirrorUR up Counter OutCounter LOS ]
++ left [ > Counter no OutCounter | MirrorDR ] -> [ | MirrorDR down Counter OutCounter LOS ]
++ right [ > Counter no OutCounter | MirrorUL ] -> [ | MirrorUL up Counter OutCounter LOS ]
++ right [ > Counter no OutCounter | MirrorDL ] -> [ | MirrorDL down Counter OutCounter LOS ]
++ up [ > Counter no OutCounter | MirrorDL ] -> [ | MirrorDL left Counter OutCounter LOS ]
++ up [ > Counter no OutCounter | MirrorDR ] -> [ | MirrorDR right Counter OutCounter LOS ]
++ down [ > Counter no OutCounter | MirrorUL ] -> [ | MirrorUL left Counter OutCounter LOS ]
++ down [ > Counter no OutCounter | MirrorUR ] -> [ | MirrorUR right Counter OutCounter LOS ]
 
-+ [ > 09 | no Solid ] -> [ | > 08 LOS ]
-+ [ > 08 | no Solid ] -> [ | > 07 LOS ]
-+ [ > 07 | no Solid ] -> [ | > 06 LOS ]
-+ [ > 06 | no Solid ] -> [ | > 05 LOS ]
-+ [ > 05 | no Solid ] -> [ | > 04 LOS ]
-+ [ > 04 | no Solid ] -> [ | > 03 LOS ]
-+ [ > 03 | no Solid ] -> [ | > 02 LOS ]
-+ [ > 02 | no Solid ] -> [ | > 01 LOS ]
-+ [ > 01 | no Solid ] -> [ | > 00 LOS ]
+left [ > 20 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 19 OutCounter LOS ]
++ left [ > 20 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 19 OutCounter LOS ]
++ right [ > 20 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 19 OutCounter LOS ]
++ right [ > 20 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 19 OutCounter LOS ]
++ up [ > 20 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 19 OutCounter LOS ]
++ up [ > 20 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 19 OutCounter LOS ]
++ down [ > 20 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 19 OutCounter LOS ]
++ down [ > 20 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 19 OutCounter LOS ]
 
-[ > 00 | no Solid no CantMove ] [ action MirrorGuy ] -> [ | Reflection ] [ MirrorGuy HasReflection ]
-[ > 00 | no Solid no CantMove ] [ action ReflectableCrate ] -> [ | CrateReflection ] [ ReflectableCrate HasReflection ]
++ left [ > 19 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 18 OutCounter LOS ]
++ left [ > 19 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 18 OutCounter LOS ]
++ right [ > 19 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 18 OutCounter LOS ]
++ right [ > 19 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 18 OutCounter LOS ]
++ up [ > 19 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 18 OutCounter LOS ]
++ up [ > 19 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 18 OutCounter LOS ]
++ down [ > 19 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 18 OutCounter LOS ]
++ down [ > 19 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 18 OutCounter LOS ]
+
++ left [ > 18 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 17 OutCounter LOS ]
++ left [ > 18 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 17 OutCounter LOS ]
++ right [ > 18 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 17 OutCounter LOS ]
++ right [ > 18 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 17 OutCounter LOS ]
++ up [ > 18 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 17 OutCounter LOS ]
++ up [ > 18 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 17 OutCounter LOS ]
++ down [ > 18 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 17 OutCounter LOS ]
++ down [ > 18 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 17 OutCounter LOS ]
+
++ left [ > 17 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 16 OutCounter LOS ]
++ left [ > 17 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 16 OutCounter LOS ]
++ right [ > 17 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 16 OutCounter LOS ]
++ right [ > 17 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 16 OutCounter LOS ]
++ up [ > 17 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 16 OutCounter LOS ]
++ up [ > 17 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 16 OutCounter LOS ]
++ down [ > 17 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 16 OutCounter LOS ]
++ down [ > 17 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 16 OutCounter LOS ]
+
++ left [ > 16 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 15 OutCounter LOS ]
++ left [ > 16 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 15 OutCounter LOS ]
++ right [ > 16 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 15 OutCounter LOS ]
++ right [ > 16 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 15 OutCounter LOS ]
++ up [ > 16 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 15 OutCounter LOS ]
++ up [ > 16 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 15 OutCounter LOS ]
++ down [ > 16 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 15 OutCounter LOS ]
++ down [ > 16 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 15 OutCounter LOS ]
+
++ left [ > 15 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 14 OutCounter LOS ]
++ left [ > 15 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 14 OutCounter LOS ]
++ right [ > 15 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 14 OutCounter LOS ]
++ right [ > 15 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 14 OutCounter LOS ]
++ up [ > 15 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 14 OutCounter LOS ]
++ up [ > 15 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 14 OutCounter LOS ]
++ down [ > 15 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 14 OutCounter LOS ]
++ down [ > 15 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 14 OutCounter LOS ]
+
++ left [ > 14 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 13 OutCounter LOS ]
++ left [ > 14 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 13 OutCounter LOS ]
++ right [ > 14 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 13 OutCounter LOS ]
++ right [ > 14 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 13 OutCounter LOS ]
++ up [ > 14 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 13 OutCounter LOS ]
++ up [ > 14 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 13 OutCounter LOS ]
++ down [ > 14 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 13 OutCounter LOS ]
++ down [ > 14 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 13 OutCounter LOS ]
+
++ left [ > 13 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 12 OutCounter LOS ]
++ left [ > 13 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 12 OutCounter LOS ]
++ right [ > 13 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 12 OutCounter LOS ]
++ right [ > 13 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 12 OutCounter LOS ]
++ up [ > 13 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 12 OutCounter LOS ]
++ up [ > 13 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 12 OutCounter LOS ]
++ down [ > 13 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 12 OutCounter LOS ]
++ down [ > 13 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 12 OutCounter LOS ]
+
++ left [ > 12 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 11 OutCounter LOS ]
++ left [ > 12 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 11 OutCounter LOS ]
++ right [ > 12 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 11 OutCounter LOS ]
++ right [ > 12 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 11 OutCounter LOS ]
++ up [ > 12 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 11 OutCounter LOS ]
++ up [ > 12 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 11 OutCounter LOS ]
++ down [ > 12 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 11 OutCounter LOS ]
++ down [ > 12 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 11 OutCounter LOS ]
+
++ left [ > 11 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 10 OutCounter LOS ]
++ left [ > 11 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 10 OutCounter LOS ]
++ right [ > 11 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 10 OutCounter LOS ]
++ right [ > 11 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 10 OutCounter LOS ]
++ up [ > 11 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 10 OutCounter LOS ]
++ up [ > 11 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 10 OutCounter LOS ]
++ down [ > 11 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 10 OutCounter LOS ]
++ down [ > 11 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 10 OutCounter LOS ]
+
++ left [ > 10 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 09 OutCounter LOS ]
++ left [ > 10 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 09 OutCounter LOS ]
++ right [ > 10 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 09 OutCounter LOS ]
++ right [ > 10 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 09 OutCounter LOS ]
++ up [ > 10 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 09 OutCounter LOS ]
++ up [ > 10 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 09 OutCounter LOS ]
++ down [ > 10 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 09 OutCounter LOS ]
++ down [ > 10 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 09 OutCounter LOS ]
+
++ left [ > 09 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 08 OutCounter LOS ]
++ left [ > 09 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 08 OutCounter LOS ]
++ right [ > 09 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 08 OutCounter LOS ]
++ right [ > 09 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 08 OutCounter LOS ]
++ up [ > 09 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 08 OutCounter LOS ]
++ up [ > 09 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 08 OutCounter LOS ]
++ down [ > 09 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 08 OutCounter LOS ]
++ down [ > 09 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 08 OutCounter LOS ]
+
++ left [ > 08 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 07 OutCounter LOS ]
++ left [ > 08 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 07 OutCounter LOS ]
++ right [ > 08 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 07 OutCounter LOS ]
++ right [ > 08 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 07 OutCounter LOS ]
++ up [ > 08 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 07 OutCounter LOS ]
++ up [ > 08 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 07 OutCounter LOS ]
++ down [ > 08 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 07 OutCounter LOS ]
++ down [ > 08 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 07 OutCounter LOS ]
+
++ left [ > 07 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 06 OutCounter LOS ]
++ left [ > 07 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 06 OutCounter LOS ]
++ right [ > 07 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 06 OutCounter LOS ]
++ right [ > 07 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 06 OutCounter LOS ]
++ up [ > 07 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 06 OutCounter LOS ]
++ up [ > 07 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 06 OutCounter LOS ]
++ down [ > 07 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 06 OutCounter LOS ]
++ down [ > 07 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 06 OutCounter LOS ]
+
++ left [ > 06 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 05 OutCounter LOS ]
++ left [ > 06 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 05 OutCounter LOS ]
++ right [ > 06 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 05 OutCounter LOS ]
++ right [ > 06 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 05 OutCounter LOS ]
++ up [ > 06 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 05 OutCounter LOS ]
++ up [ > 06 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 05 OutCounter LOS ]
++ down [ > 06 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 05 OutCounter LOS ]
++ down [ > 06 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 05 OutCounter LOS ]
+
++ left [ > 05 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 04 OutCounter LOS ]
++ left [ > 05 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 04 OutCounter LOS ]
++ right [ > 05 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 04 OutCounter LOS ]
++ right [ > 05 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 04 OutCounter LOS ]
++ up [ > 05 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 04 OutCounter LOS ]
++ up [ > 05 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 04 OutCounter LOS ]
++ down [ > 05 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 04 OutCounter LOS ]
++ down [ > 05 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 04 OutCounter LOS ]
+
++ left [ > 04 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 03 OutCounter LOS ]
++ left [ > 04 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 03 OutCounter LOS ]
++ right [ > 04 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 03 OutCounter LOS ]
++ right [ > 04 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 03 OutCounter LOS ]
++ up [ > 04 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 03 OutCounter LOS ]
++ up [ > 04 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 03 OutCounter LOS ]
++ down [ > 04 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 03 OutCounter LOS ]
++ down [ > 04 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 03 OutCounter LOS ]
+
++ left [ > 03 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 02 OutCounter LOS ]
++ left [ > 03 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 02 OutCounter LOS ]
++ right [ > 03 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 02 OutCounter LOS ]
++ right [ > 03 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 02 OutCounter LOS ]
++ up [ > 03 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 02 OutCounter LOS ]
++ up [ > 03 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 02 OutCounter LOS ]
++ down [ > 03 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 02 OutCounter LOS ]
++ down [ > 03 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 02 OutCounter LOS ]
+
++ left [ > 02 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 01 OutCounter LOS ]
++ left [ > 02 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 01 OutCounter LOS ]
++ right [ > 02 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 01 OutCounter LOS ]
++ right [ > 02 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 01 OutCounter LOS ]
++ up [ > 02 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 01 OutCounter LOS ]
++ up [ > 02 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 01 OutCounter LOS ]
++ down [ > 02 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 01 OutCounter LOS ]
++ down [ > 02 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 01 OutCounter LOS ]
+
++ left [ > 01 OutCounter LOS | MirrorUR ] -> [ | MirrorUR up 00 OutCounter LOS ]
++ left [ > 01 OutCounter LOS | MirrorDR ] -> [ | MirrorDR down 00 OutCounter LOS ]
++ right [ > 01 OutCounter LOS | MirrorUL ] -> [ | MirrorUL up 00 OutCounter LOS ]
++ right [ > 01 OutCounter LOS | MirrorDL ] -> [ | MirrorDL down 00 OutCounter LOS ]
++ up [ > 01 OutCounter LOS | MirrorDL ] -> [ | MirrorDL left 00 OutCounter LOS ]
++ up [ > 01 OutCounter LOS | MirrorDR ] -> [ | MirrorDR right 00 OutCounter LOS ]
++ down [ > 01 OutCounter LOS | MirrorUL ] -> [ | MirrorUL left 00 OutCounter LOS ]
++ down [ > 01 OutCounter LOS | MirrorUR ] -> [ | MirrorUR right 00 OutCounter LOS ]
+
++ left [ > 00 OutCounter LOS | MirrorUR ] -> [ | MirrorUR ]
++ left [ > 00 OutCounter LOS | MirrorDR ] -> [ | MirrorDR ]
++ right [ > 00 OutCounter LOS | MirrorUL ] -> [ | MirrorUL ]
++ right [ > 00 OutCounter LOS | MirrorDL ] -> [ | MirrorDL ]
++ up [ > 00 OutCounter LOS | MirrorDL ] -> [ | MirrorDL ]
++ up [ > 00 OutCounter LOS | MirrorDR ] -> [ | MirrorDR ]
++ down [ > 00 OutCounter LOS | MirrorUL ] -> [ | MirrorUL ]
++ down [ > 00 OutCounter LOS | MirrorUR ] -> [ | MirrorUR ]
+
++ [ > 20 OutCounter LOS | no Solid ] -> [ | > 19 OutCounter LOS ]
++ [ > 19 OutCounter LOS | no Solid ] -> [ | > 18 OutCounter LOS ]
++ [ > 18 OutCounter LOS | no Solid ] -> [ | > 17 OutCounter LOS ]
++ [ > 17 OutCounter LOS | no Solid ] -> [ | > 16 OutCounter LOS ]
++ [ > 16 OutCounter LOS | no Solid ] -> [ | > 15 OutCounter LOS ]
++ [ > 15 OutCounter LOS | no Solid ] -> [ | > 14 OutCounter LOS ]
++ [ > 14 OutCounter LOS | no Solid ] -> [ | > 13 OutCounter LOS ]
++ [ > 13 OutCounter LOS | no Solid ] -> [ | > 12 OutCounter LOS ]
++ [ > 12 OutCounter LOS | no Solid ] -> [ | > 11 OutCounter LOS ]
++ [ > 11 OutCounter LOS | no Solid ] -> [ | > 10 OutCounter LOS ]
++ [ > 10 OutCounter LOS | no Solid ] -> [ | > 09 OutCounter LOS ]
++ [ > 09 OutCounter LOS | no Solid ] -> [ | > 08 OutCounter LOS ]
++ [ > 08 OutCounter LOS | no Solid ] -> [ | > 07 OutCounter LOS ]
++ [ > 07 OutCounter LOS | no Solid ] -> [ | > 06 OutCounter LOS ]
++ [ > 06 OutCounter LOS | no Solid ] -> [ | > 05 OutCounter LOS ]
++ [ > 05 OutCounter LOS | no Solid ] -> [ | > 04 OutCounter LOS ]
++ [ > 04 OutCounter LOS | no Solid ] -> [ | > 03 OutCounter LOS ]
++ [ > 03 OutCounter LOS | no Solid ] -> [ | > 02 OutCounter LOS ]
++ [ > 02 OutCounter LOS | no Solid ] -> [ | > 01 OutCounter LOS ]
++ [ > 01 OutCounter LOS | no Solid ] -> [ | > 00 OutCounter LOS ]
+
+[ > 00 OutCounter LOS | no Solid no CantMove ] [ action MirrorGuy ] -> [ | Reflection ] [ MirrorGuy HasReflection ]
+[ > 00 OutCounter LOS | no Solid no CantMove ] [ action ReflectableCrate ] -> [ | CrateReflection ] [ ReflectableCrate HasReflection ]
 
 [ Counter ] -> []
+[ OutCounter ] -> []
 
 [ action Reflectable ] [ stationary LOS ] -> [ action Reflectable ] []
 
@@ -1142,6 +1391,7 @@ left [ > Counter | MirrorUR ] -> [ | MirrorUR up Counter ]
 
 [ action Reflectable ] -> [ Reflectable ]
 endloop
+
 
 
 [ DirectionCounter ] -> []
@@ -1829,8 +2079,6 @@ ________________________________
 
 (level mirror_10_alt2)
 
-(TODO: shorten path by 1 on secondary reflection)
-
 ____________________
 ___________...._____
 ___________....__.._
@@ -1869,14 +2117,12 @@ ___________________
 
 
 (level mirror_10_b_v2)
-
-(TODO: reflection path should be longer by 5)
-
 ______________________
-____..__..______....__
-____.......___......._
-__.........___......._
-__........___...______
+___.._________________
+___....__..______...._
+___.........__......._
+__..........__......._
+__.........__...______
 __...._______.._______
 _..'.__.......__....__
 _....__......___.g.___
@@ -1888,8 +2134,6 @@ ______________________
 
 
 (level mirror_10_d)
-
-(TODO: reduce reflection path by 1)
 
 _____________________
 ___________..________
