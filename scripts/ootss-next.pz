@@ -24,9 +24,6 @@ grey
 CharacterSwap
 transparent
 
-Teleported
-transparent
-
 Returning
 transparent
 
@@ -1062,7 +1059,6 @@ DFireball
 
 (mirror layers)
 HasReflection
-Teleported
 Returning
 Secondary
 Tertiary
@@ -1222,10 +1218,10 @@ down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 
 [ > Fighter | Crate | PurpleDoor Basement ] -> [ > Fighter | | Basement CrateInHole] sfx3
 
-
 [ >  Fighter | Moveable ] -> [  >  Fighter | > Moveable  ]
 
 [ > Moveable | Moveable ] [ Fighter] -> [ > Moveable | > Moveable ] [ Fighter] (Fighters push.)
+
 
 [ < Thief | Moveable ] -> [ < Thief | < Moveable ] (Thieves pull.)
 
@@ -1463,13 +1459,15 @@ late [ GreenDoor no Basement ] -> [ GreenDoor GreenDoorA ]
 late [ GreenOpen no Basement ] -> [ GreenOpen GreenOpenA ]
 
 
+(!NB not adding Mirror here blocks fighter from moving 2 movables on level "drowner", investigate)
+
 (Handle reflections)
 
 startloop
-random [ Reflectable no DirectionCounter ] -> [ action Reflectable North left 00 ]
-+ [ Reflectable North ] -> [ action Reflectable East right 00 ]
-+ [ Reflectable East ] -> [ action Reflectable South up 00 ]
-+ [ Reflectable South ] -> [ action Reflectable West down 00 ]
+random [ Mirror ] [ Reflectable no DirectionCounter ] -> [ Mirror ] [ action Reflectable North left 00 ]
++ [ Mirror ] [ Reflectable North ] -> [ Mirror ] [ action Reflectable East right 00 ]
++ [ Mirror ] [ Reflectable East ] ->  [ Mirror ] [ action Reflectable South up 00 ]
++ [ Mirror ] [ Reflectable South ] -> [ Mirror ] [ action Reflectable West down 00 ]
  
 (outbound: count up until a mirror or a wall is hit)
 [ > 00 no Returning | no Solid ] -> [ | > 01 LOS ]
