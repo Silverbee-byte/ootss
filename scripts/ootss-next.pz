@@ -42,6 +42,17 @@ transparent
 MundaneSeed
 transparent
 
+JailSeed
+transparent
+
+Jail
+grey
+00000
+.....
+00000
+.....
+00000
+
 Mundane
 transparent
 
@@ -961,7 +972,7 @@ J = YellowSwitch and SBard    (heroes3_5)
 K = YellowSwitch and Fighter (heroes3_5)
 L = DragonLeft
 M = MonsterDoor
-(N = )
+N = JailSeed
 O = Goblin
 P = Priest
 Q = Goal and MonsterDoor (mosh_pit_small)
@@ -969,7 +980,7 @@ R = DragonRight
 S = YellowSwitch and Goblin (one_fire_v2)
 T = Thief
 U = DragonUp
-(V = better used with ^ < > v as a directional entity, though warnings)
+(V = reserved, unavailable because of ^ < > v )
 W = Wizard
 (X = )
 Y = YellowSwitch and Bard (heroes3_2_v4)
@@ -1074,6 +1085,9 @@ Switched
 CharacterSwap
 
 ShadowDoor, HasSavedDoor
+
+JailSeed
+Jail
 
 ======
 RULES
@@ -1296,6 +1310,21 @@ down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 
 [WarpBall] -> Cancel
 [Note] -> []
+
+
+(Special Swap and rules order for Jail)
+
+[ JailSeed ] [ SThief ] -> [ JailSeed ] [ SThief Jail ]
+[ JailSeed ] [ SFighter ] -> [ JailSeed ] [ SFighter Jail ]
+
+[ JailSeed ] -> []
+
+[ Jail ] [ CharacterSwap Wizard ] [ SThief ] -> [ Jail ] [ SWizard ] [ Thief Sfx1 ]
+[ Jail ] [ CharacterSwap Thief ] [ SFighter ] -> [ Jail ] [ SThief ] [ Fighter Sfx1]
+[ Jail ] [ CharacterSwap Fighter ] [ SWizard ] -> [ Jail ] [ SFighter ] [ Wizard Sfx1]
+
+[ > Hero Jail ] -> [ Hero Jail ]
+
 
 (The following mess is for changing characters. But at least it's less messy than before. Thanks to Stephen for spotting my silly redundancies.)
 
@@ -2376,11 +2405,9 @@ section heroes1_18
 
 section heroes1_19_jail
 
-(TODO: implement jail, implement swap order)
-
 #######
 ##*#*##
-#..W..#
+#N.W..#
 #.GGG.#
 #.....#
 #2###1#
@@ -2908,8 +2935,6 @@ section heroes3_5
 ############
 
 section worlds_collide_heroes_and_mirrors_v3
-
-(TODO: implement goblin and wizard teleporting)
 
 __________________________
 ______________..._________
