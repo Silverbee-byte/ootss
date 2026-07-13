@@ -33,10 +33,19 @@ transparent
 Secondary
 transparent
 
+Tertiary
+transparent
+
 Switched
 transparent
 
 WaterSeed
+transparent
+
+MundaneSeed
+transparent
+
+Mundane
 transparent
 
 Basement
@@ -949,7 +958,7 @@ D = DragonDown
 E = Goal and Fighter (easy_situation_v2)
 F = Fighter
 G = Goal
-(H = )
+H = MundaneSeed
 I = Druid
 J = YellowSwitch and SBard    (heroes3_5)
 K = YellowSwitch and Fighter (heroes3_5)
@@ -1042,6 +1051,9 @@ RayD
 RayL
 RayR
 
+MundaneSeed
+Mundane
+
 Saved
 RFireball
 LFireball
@@ -1053,6 +1065,7 @@ HasReflection
 Teleported
 Returning
 Secondary
+Tertiary
 Counter
 DirectionCounter
 DoorMarker, InvDoorMarker
@@ -1093,6 +1106,11 @@ late [ WaterAnim no Hole ] -> []
 
 
 (if there's a mirror on the map, replace background with mirrorbackground)
+
+once [ MundaneSeed ] [ MirrorDL ] -> [ Mundane ] [ MirrorDL Mundane ]
+once [ MundaneSeed ] [ MirrorDR ] -> [ Mundane ] [ MirrorDR Mundane ]
+
+once [ MundaneSeed ] -> []
 
 
 
@@ -1487,92 +1505,133 @@ random [ Reflectable no DirectionCounter ] -> [ action Reflectable North left 00
 
 (hit a wall / crate / hero that ISN'T a mirror: the ray is blocked, no reflection)
 [ > Counter | Solid no Mirror ] -> [ | Solid ]
- 
+
 (first mirror hit: bounce, and switch permanently into Returning mode)
-left    [ > Counter no Returning | MirrorUR ] -> [ | MirrorUR up    Counter Returning ]
-+ left  [ > Counter no Returning | MirrorDR ] -> [ | MirrorDR down  Counter Returning ]
-+ right [ > Counter no Returning | MirrorUL ] -> [ | MirrorUL up    Counter Returning ]
-+ right [ > Counter no Returning | MirrorDL ] -> [ | MirrorDL down  Counter Returning ]
-+ up    [ > Counter no Returning | MirrorDL ] -> [ | MirrorDL left  Counter Returning ]
-+ up    [ > Counter no Returning | MirrorDR ] -> [ | MirrorDR right Counter Returning ]
-+ down  [ > Counter no Returning | MirrorUL ] -> [ | MirrorUL left  Counter Returning ]
-+ down  [ > Counter no Returning | MirrorUR ] -> [ | MirrorUR right Counter Returning ]
- 
-(any LATER mirror hit while returning: bounce again, still counting down - this is what gives you free secondary/tertiary reflections)
-+ left  [ > Counter Returning | MirrorUR ] -> [ | MirrorUR up    Counter Returning Secondary ]
-+ left  [ > Counter Returning | MirrorDR ] -> [ | MirrorDR down  Counter Returning Secondary ]
-+ right [ > Counter Returning | MirrorUL ] -> [ | MirrorUL up    Counter Returning Secondary ]
-+ right [ > Counter Returning | MirrorDL ] -> [ | MirrorDL down  Counter Returning Secondary ]
-+ up    [ > Counter Returning | MirrorDL ] -> [ | MirrorDL left  Counter Returning Secondary ]
-+ up    [ > Counter Returning | MirrorDR ] -> [ | MirrorDR right Counter Returning Secondary ]
-+ down  [ > Counter Returning | MirrorUL ] -> [ | MirrorUL left  Counter Returning Secondary ]
-+ down  [ > Counter Returning | MirrorUR ] -> [ | MirrorUR right Counter Returning Secondary ]
+left    [ > Counter no Returning no Secondary no Tertiary | MirrorUR no Mundane ] -> [ | MirrorUR up    Counter Returning ]
++ left  [ > Counter no Returning no Secondary no Tertiary | MirrorDR no Mundane ] -> [ | MirrorDR down  Counter Returning ]
++ right [ > Counter no Returning no Secondary no Tertiary | MirrorUL no Mundane ] -> [ | MirrorUL up    Counter Returning ]
++ right [ > Counter no Returning no Secondary no Tertiary | MirrorDL no Mundane ] -> [ | MirrorDL down  Counter Returning ]
++ up    [ > Counter no Returning no Secondary no Tertiary | MirrorDL no Mundane ] -> [ | MirrorDL left  Counter Returning ]
++ up    [ > Counter no Returning no Secondary no Tertiary | MirrorDR no Mundane ] -> [ | MirrorDR right Counter Returning ]
++ down  [ > Counter no Returning no Secondary no Tertiary | MirrorUL no Mundane ] -> [ | MirrorUL left  Counter Returning ]
++ down  [ > Counter no Returning no Secondary no Tertiary | MirrorUR no Mundane ] -> [ | MirrorUR right Counter Returning ]
+
+(secondary)
++ left  [ > Counter Returning | MirrorUR ] -> [ | MirrorUR up    Counter Secondary ]
++ left  [ > Counter Returning | MirrorDR ] -> [ | MirrorDR down  Counter Secondary ]
++ right [ > Counter Returning | MirrorUL ] -> [ | MirrorUL up    Counter Secondary ]
++ right [ > Counter Returning | MirrorDL ] -> [ | MirrorDL down  Counter Secondary ]
++ up    [ > Counter Returning | MirrorDL ] -> [ | MirrorDL left  Counter Secondary ]
++ up    [ > Counter Returning | MirrorDR ] -> [ | MirrorDR right Counter Secondary ]
++ down  [ > Counter Returning | MirrorUL ] -> [ | MirrorUL left  Counter Secondary ]
++ down  [ > Counter Returning | MirrorUR ] -> [ | MirrorUR right Counter Secondary ]
+
+(tertiary)
++ left  [ > Counter Secondary | MirrorUR ] -> [ | MirrorUR up    Counter Tertiary ]
++ left  [ > Counter Secondary | MirrorDR ] -> [ | MirrorDR down  Counter Tertiary ]
++ right [ > Counter Secondary | MirrorUL ] -> [ | MirrorUL up    Counter Tertiary ]
++ right [ > Counter Secondary | MirrorDL ] -> [ | MirrorDL down  Counter Tertiary ]
++ up    [ > Counter Secondary | MirrorDL ] -> [ | MirrorDL left  Counter Tertiary ]
++ up    [ > Counter Secondary | MirrorDR ] -> [ | MirrorDR right Counter Tertiary ]
++ down  [ > Counter Secondary | MirrorUL ] -> [ | MirrorUL left  Counter Tertiary ]
++ down  [ > Counter Secondary | MirrorUR ] -> [ | MirrorUR right Counter Tertiary ]
  
 (returning: count back down)
-+ [ > 30 Returning no Secondary | no Solid ] -> [ | > 29 Returning LOS ]
-+ [ > 29 Returning no Secondary | no Solid ] -> [ | > 28 Returning LOS ]
-+ [ > 28 Returning no Secondary | no Solid ] -> [ | > 27 Returning LOS ]
-+ [ > 27 Returning no Secondary | no Solid ] -> [ | > 26 Returning LOS ]
-+ [ > 26 Returning no Secondary | no Solid ] -> [ | > 25 Returning LOS ]
-+ [ > 25 Returning no Secondary | no Solid ] -> [ | > 24 Returning LOS ]
-+ [ > 24 Returning no Secondary | no Solid ] -> [ | > 23 Returning LOS ]
-+ [ > 23 Returning no Secondary | no Solid ] -> [ | > 22 Returning LOS ]
-+ [ > 22 Returning no Secondary | no Solid ] -> [ | > 21 Returning LOS ]
-+ [ > 21 Returning no Secondary | no Solid ] -> [ | > 20 Returning LOS ]
-+ [ > 20 Returning no Secondary | no Solid ] -> [ | > 19 Returning LOS ]
-+ [ > 19 Returning no Secondary | no Solid ] -> [ | > 18 Returning LOS ]
-+ [ > 18 Returning no Secondary | no Solid ] -> [ | > 17 Returning LOS ]
-+ [ > 17 Returning no Secondary | no Solid ] -> [ | > 16 Returning LOS ]
-+ [ > 16 Returning no Secondary | no Solid ] -> [ | > 15 Returning LOS ]
-+ [ > 15 Returning no Secondary | no Solid ] -> [ | > 14 Returning LOS ]
-+ [ > 14 Returning no Secondary | no Solid ] -> [ | > 13 Returning LOS ]
-+ [ > 13 Returning no Secondary | no Solid ] -> [ | > 12 Returning LOS ]
-+ [ > 12 Returning no Secondary | no Solid ] -> [ | > 11 Returning LOS ]
-+ [ > 11 Returning no Secondary | no Solid ] -> [ | > 10 Returning LOS ]
-+ [ > 10 Returning no Secondary | no Solid ] -> [ | > 09 Returning LOS ]
-+ [ > 09 Returning no Secondary | no Solid ] -> [ | > 08 Returning LOS ]
-+ [ > 08 Returning no Secondary | no Solid ] -> [ | > 07 Returning LOS ]
-+ [ > 07 Returning no Secondary | no Solid ] -> [ | > 06 Returning LOS ]
-+ [ > 06 Returning no Secondary | no Solid ] -> [ | > 05 Returning LOS ]
-+ [ > 05 Returning no Secondary | no Solid ] -> [ | > 04 Returning LOS ]
-+ [ > 04 Returning no Secondary | no Solid ] -> [ | > 03 Returning LOS ]
-+ [ > 03 Returning no Secondary | no Solid ] -> [ | > 02 Returning LOS ]
-+ [ > 02 Returning no Secondary | no Solid ] -> [ | > 01 Returning LOS ]
-+ [ > 01 Returning no Secondary | no Solid ] -> [ | > 00 Returning LOS ]
++ [ > 30 Returning | no Solid ] -> [ | > 29 Returning LOS ]
++ [ > 29 Returning | no Solid ] -> [ | > 28 Returning LOS ]
++ [ > 28 Returning | no Solid ] -> [ | > 27 Returning LOS ]
++ [ > 27 Returning | no Solid ] -> [ | > 26 Returning LOS ]
++ [ > 26 Returning | no Solid ] -> [ | > 25 Returning LOS ]
++ [ > 25 Returning | no Solid ] -> [ | > 24 Returning LOS ]
++ [ > 24 Returning | no Solid ] -> [ | > 23 Returning LOS ]
++ [ > 23 Returning | no Solid ] -> [ | > 22 Returning LOS ]
++ [ > 22 Returning | no Solid ] -> [ | > 21 Returning LOS ]
++ [ > 21 Returning | no Solid ] -> [ | > 20 Returning LOS ]
++ [ > 20 Returning | no Solid ] -> [ | > 19 Returning LOS ]
++ [ > 19 Returning | no Solid ] -> [ | > 18 Returning LOS ]
++ [ > 18 Returning | no Solid ] -> [ | > 17 Returning LOS ]
++ [ > 17 Returning | no Solid ] -> [ | > 16 Returning LOS ]
++ [ > 16 Returning | no Solid ] -> [ | > 15 Returning LOS ]
++ [ > 15 Returning | no Solid ] -> [ | > 14 Returning LOS ]
++ [ > 14 Returning | no Solid ] -> [ | > 13 Returning LOS ]
++ [ > 13 Returning | no Solid ] -> [ | > 12 Returning LOS ]
++ [ > 12 Returning | no Solid ] -> [ | > 11 Returning LOS ]
++ [ > 11 Returning | no Solid ] -> [ | > 10 Returning LOS ]
++ [ > 10 Returning | no Solid ] -> [ | > 09 Returning LOS ]
++ [ > 09 Returning | no Solid ] -> [ | > 08 Returning LOS ]
++ [ > 08 Returning | no Solid ] -> [ | > 07 Returning LOS ]
++ [ > 07 Returning | no Solid ] -> [ | > 06 Returning LOS ]
++ [ > 06 Returning | no Solid ] -> [ | > 05 Returning LOS ]
++ [ > 05 Returning | no Solid ] -> [ | > 04 Returning LOS ]
++ [ > 04 Returning | no Solid ] -> [ | > 03 Returning LOS ]
++ [ > 03 Returning | no Solid ] -> [ | > 02 Returning LOS ]
++ [ > 02 Returning | no Solid ] -> [ | > 01 Returning LOS ]
++ [ > 01 Returning | no Solid ] -> [ | > 00 Returning LOS ]
 
-[ > 00 Returning no Secondary | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
+[ > 00 Returning | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
 
-+ [ > 30 Returning Secondary | no Solid ] -> [ | > 29 Returning Secondary LOS ]
-+ [ > 29 Returning Secondary | no Solid ] -> [ | > 28 Returning Secondary LOS ]
-+ [ > 28 Returning Secondary | no Solid ] -> [ | > 27 Returning Secondary LOS ]
-+ [ > 27 Returning Secondary | no Solid ] -> [ | > 26 Returning Secondary LOS ]
-+ [ > 26 Returning Secondary | no Solid ] -> [ | > 25 Returning Secondary LOS ]
-+ [ > 25 Returning Secondary | no Solid ] -> [ | > 24 Returning Secondary LOS ]
-+ [ > 24 Returning Secondary | no Solid ] -> [ | > 23 Returning Secondary LOS ]
-+ [ > 23 Returning Secondary | no Solid ] -> [ | > 22 Returning Secondary LOS ]
-+ [ > 22 Returning Secondary | no Solid ] -> [ | > 21 Returning Secondary LOS ]
-+ [ > 21 Returning Secondary | no Solid ] -> [ | > 20 Returning Secondary LOS ]
-+ [ > 20 Returning Secondary | no Solid ] -> [ | > 19 Returning Secondary LOS ]
-+ [ > 19 Returning Secondary | no Solid ] -> [ | > 18 Returning Secondary LOS ]
-+ [ > 18 Returning Secondary | no Solid ] -> [ | > 17 Returning Secondary LOS ]
-+ [ > 17 Returning Secondary | no Solid ] -> [ | > 16 Returning Secondary LOS ]
-+ [ > 16 Returning Secondary | no Solid ] -> [ | > 15 Returning Secondary LOS ]
-+ [ > 15 Returning Secondary | no Solid ] -> [ | > 14 Returning Secondary LOS ]
-+ [ > 14 Returning Secondary | no Solid ] -> [ | > 13 Returning Secondary LOS ]
-+ [ > 13 Returning Secondary | no Solid ] -> [ | > 12 Returning Secondary LOS ]
-+ [ > 12 Returning Secondary | no Solid ] -> [ | > 11 Returning Secondary LOS ]
-+ [ > 11 Returning Secondary | no Solid ] -> [ | > 10 Returning Secondary LOS ]
-+ [ > 10 Returning Secondary | no Solid ] -> [ | > 09 Returning Secondary LOS ]
-+ [ > 09 Returning Secondary | no Solid ] -> [ | > 08 Returning Secondary LOS ]
-+ [ > 08 Returning Secondary | no Solid ] -> [ | > 07 Returning Secondary LOS ]
-+ [ > 07 Returning Secondary | no Solid ] -> [ | > 06 Returning Secondary LOS ]
-+ [ > 06 Returning Secondary | no Solid ] -> [ | > 05 Returning Secondary LOS ]
-+ [ > 05 Returning Secondary | no Solid ] -> [ | > 04 Returning Secondary LOS ]
-+ [ > 04 Returning Secondary | no Solid ] -> [ | > 03 Returning Secondary LOS ]
-+ [ > 03 Returning Secondary | no Solid ] -> [ | > 02 Returning Secondary LOS ]
-+ [ > 02 Returning Secondary | no Solid ] -> [ | > 01 Returning Secondary LOS ]
++ [ > 30 Secondary | no Solid ] -> [ | > 29 Secondary LOS ]
++ [ > 29 Secondary | no Solid ] -> [ | > 28 Secondary LOS ]
++ [ > 28 Secondary | no Solid ] -> [ | > 27 Secondary LOS ]
++ [ > 27 Secondary | no Solid ] -> [ | > 26 Secondary LOS ]
++ [ > 26 Secondary | no Solid ] -> [ | > 25 Secondary LOS ]
++ [ > 25 Secondary | no Solid ] -> [ | > 24 Secondary LOS ]
++ [ > 24 Secondary | no Solid ] -> [ | > 23 Secondary LOS ]
++ [ > 23 Secondary | no Solid ] -> [ | > 22 Secondary LOS ]
++ [ > 22 Secondary | no Solid ] -> [ | > 21 Secondary LOS ]
++ [ > 21 Secondary | no Solid ] -> [ | > 20 Secondary LOS ]
++ [ > 20 Secondary | no Solid ] -> [ | > 19 Secondary LOS ]
++ [ > 19 Secondary | no Solid ] -> [ | > 18 Secondary LOS ]
++ [ > 18 Secondary | no Solid ] -> [ | > 17 Secondary LOS ]
++ [ > 17 Secondary | no Solid ] -> [ | > 16 Secondary LOS ]
++ [ > 16 Secondary | no Solid ] -> [ | > 15 Secondary LOS ]
++ [ > 15 Secondary | no Solid ] -> [ | > 14 Secondary LOS ]
++ [ > 14 Secondary | no Solid ] -> [ | > 13 Secondary LOS ]
++ [ > 13 Secondary | no Solid ] -> [ | > 12 Secondary LOS ]
++ [ > 12 Secondary | no Solid ] -> [ | > 11 Secondary LOS ]
++ [ > 11 Secondary | no Solid ] -> [ | > 10 Secondary LOS ]
++ [ > 10 Secondary | no Solid ] -> [ | > 09 Secondary LOS ]
++ [ > 09 Secondary | no Solid ] -> [ | > 08 Secondary LOS ]
++ [ > 08 Secondary | no Solid ] -> [ | > 07 Secondary LOS ]
++ [ > 07 Secondary | no Solid ] -> [ | > 06 Secondary LOS ]
++ [ > 06 Secondary | no Solid ] -> [ | > 05 Secondary LOS ]
++ [ > 05 Secondary | no Solid ] -> [ | > 04 Secondary LOS ]
++ [ > 04 Secondary | no Solid ] -> [ | > 03 Secondary LOS ]
++ [ > 03 Secondary | no Solid ] -> [ | > 02 Secondary LOS ]
++ [ > 02 Secondary | no Solid ] -> [ | > 01 Secondary LOS ]
 
-[ > 01 Returning Secondary | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
+[ > 01 Secondary | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
+
++ [ > 30 Tertiary | no Solid ] -> [ | > 29 Tertiary LOS ]
++ [ > 29 Tertiary | no Solid ] -> [ | > 28 Tertiary LOS ]
++ [ > 28 Tertiary | no Solid ] -> [ | > 27 Tertiary LOS ]
++ [ > 27 Tertiary | no Solid ] -> [ | > 26 Tertiary LOS ]
++ [ > 26 Tertiary | no Solid ] -> [ | > 25 Tertiary LOS ]
++ [ > 25 Tertiary | no Solid ] -> [ | > 24 Tertiary LOS ]
++ [ > 24 Tertiary | no Solid ] -> [ | > 23 Tertiary LOS ]
++ [ > 23 Tertiary | no Solid ] -> [ | > 22 Tertiary LOS ]
++ [ > 22 Tertiary | no Solid ] -> [ | > 21 Tertiary LOS ]
++ [ > 21 Tertiary | no Solid ] -> [ | > 20 Tertiary LOS ]
++ [ > 20 Tertiary | no Solid ] -> [ | > 19 Tertiary LOS ]
++ [ > 19 Tertiary | no Solid ] -> [ | > 18 Tertiary LOS ]
++ [ > 18 Tertiary | no Solid ] -> [ | > 17 Tertiary LOS ]
++ [ > 17 Tertiary | no Solid ] -> [ | > 16 Tertiary LOS ]
++ [ > 16 Tertiary | no Solid ] -> [ | > 15 Tertiary LOS ]
++ [ > 15 Tertiary | no Solid ] -> [ | > 14 Tertiary LOS ]
++ [ > 14 Tertiary | no Solid ] -> [ | > 13 Tertiary LOS ]
++ [ > 13 Tertiary | no Solid ] -> [ | > 12 Tertiary LOS ]
++ [ > 12 Tertiary | no Solid ] -> [ | > 11 Tertiary LOS ]
++ [ > 11 Tertiary | no Solid ] -> [ | > 10 Tertiary LOS ]
++ [ > 10 Tertiary | no Solid ] -> [ | > 09 Tertiary LOS ]
++ [ > 09 Tertiary | no Solid ] -> [ | > 08 Tertiary LOS ]
++ [ > 08 Tertiary | no Solid ] -> [ | > 07 Tertiary LOS ]
++ [ > 07 Tertiary | no Solid ] -> [ | > 06 Tertiary LOS ]
++ [ > 06 Tertiary | no Solid ] -> [ | > 05 Tertiary LOS ]
++ [ > 05 Tertiary | no Solid ] -> [ | > 04 Tertiary LOS ]
++ [ > 04 Tertiary | no Solid ] -> [ | > 03 Tertiary LOS ]
++ [ > 03 Tertiary | no Solid ] -> [ | > 02 Tertiary LOS ]
+
+[ > 02 Tertiary | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
 
 [ Counter ] -> []
 [ Returning ] -> []
@@ -2037,7 +2096,7 @@ ____________________
 
 section mundane_mirror
 
-___________________
+H__________________
 _____________...___
 ____________..`~___
 ___________________
