@@ -414,7 +414,7 @@ function updateControls() {
   let solution = (convertSolution(solutions[levelName]||'')).toUpperCase();
 
   if (pos>=solution.length) {
-    pos = solution.length-1;
+    pos = solution.length;
   }
 
   let at = solution[pos] || ' ';
