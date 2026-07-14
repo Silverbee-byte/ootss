@@ -21,6 +21,9 @@ OBJECTS
 Bedrock
 transparent
 
+Spacer
+transparent
+
 CharacterSwap
 transparent
 
@@ -1014,7 +1017,7 @@ O = Bedrock and Goblin
 P = Bedrock and Priest
 Q = Goal and MonsterDoor (mosh_pit_small)
 R = Bedrock and DragonRight
-S = Bedrock and YellowSwitch and Goblin (one_fire_v2)
+S = YellowSwitch and Goblin (one_fire_v2)
 T = Bedrock and Thief
 U = Bedrock and DragonUp
 (V = reserved, unavailable because of ^ < > v )
@@ -1055,6 +1058,8 @@ EndGame 86793500
 ================
 COLLISIONLAYERS
 ================
+
+Spacer
 
 Bedrock
 
@@ -1428,6 +1433,8 @@ Late [Dying Hero] -> [Corpse Sfx6]
 late [ColorDoor no DoorMarker no InvDoorMarker] -> [ColorDoor DoorMarker]
 late [ColorOpen no DoorMarker no InvDoorMarker] -> [ColorOpen InvDoorMarker]
 
+
+(yellow door doesn't have crate rule because of heroes1_16_v3, no crateinhole, it destroys crates instead)
 late [Weighing YellowSwitch] [YellowDoor DoorMarker] -> [Weighing YellowSwitch] [YellowOpen DoorMarker]
 late [YellowSwitch no Weighing] [YellowOpen DoorMarker] -> [YellowSwitch] [YellowDoor DoorMarker]
 late [Weighing YellowSwitch] [YellowOpen InvDoorMarker] -> [Weighing YellowSwitch] [YellowDoor InvDoorMarker]
@@ -1484,7 +1491,6 @@ late [ YellowOpen Basement ] -> [ YellowOpen YellowDoorA Basement ]
 late [ PurpleDoor Basement ] -> [ PurpleDoor PurpleOpenW Basement ]
 late [ PurpleOpen Basement ] -> [ PurpleOpen PurpleDoorA Basement ]
 
-
 late [ BlueDoor Basement ] -> [ BlueDoor BlueOpenW Basement ]
 late [ BlueOpen Basement ] -> [ BlueOpen BlueDoorA Basement ]
 
@@ -1492,17 +1498,21 @@ late [ GreenDoor Basement ] -> [ GreenDoor GreenOpenW Basement ]
 late [ GreenOpen Basement ] -> [ GreenOpen GreenDoorA Basement ]
 
 
-late [ YellowDoor no Basement ] -> [ Bedrock YellowDoorA YellowDoor ]
-late [ Bedrock YellowOpen no Basement ] -> [ YellowOpenA YellowOpen ]
+late [ YellowDoor no Basement ] -> [ Spacer YellowDoorA YellowDoor ]
+late [ Spacer YellowOpen no Basement ] -> [ YellowOpenA YellowOpen ]
+late [ YellowOpen no Basement ] -> [ YellowOpenA YellowOpen ]
 
-late [ PurpleDoor no Basement ] -> [ Bedrock PurpleDoor PurpleDoorA ]
-late [ Bedrock PurpleOpen no Basement ] -> [ PurpleOpen PurpleOpenA ]
+late [ PurpleDoor no Basement ] -> [ Spacer PurpleDoor PurpleDoorA ]
+late [ Spacer PurpleOpen no Basement ] -> [ PurpleOpen PurpleOpenA ]
+late [ PurpleOpen no Basement ] -> [ PurpleOpen PurpleOpenA ]
 
-late [ BlueDoor no Basement ] -> [ Bedrock BlueDoor BlueDoorA ]
-late [ Bedrock BlueOpen no Basement ] -> [ BlueOpen BlueOpenA ]
+late [ BlueDoor no Basement ] -> [ Spacer BlueDoor BlueDoorA ]
+late [ Spacer BlueOpen no Basement ] -> [ BlueOpen BlueOpenA ]
+late [ BlueOpen no Basement ] -> [ BlueOpen BlueOpenA ]
 
-late [ GreenDoor no Basement ] -> [ Bedrock GreenDoor GreenDoorA ]
-late [ Bedrock GreenOpen no Basement ] -> [ GreenOpen GreenOpenA ]
+late [ GreenDoor no Basement ] -> [ Spacer GreenDoor GreenDoorA ]
+late [ Spacer GreenOpen no Basement ] -> [ GreenOpen GreenOpenA ]
+late [ GreenOpen no Basement ] -> [ GreenOpen GreenOpenA ]
 
 
 (Handle reflections)
