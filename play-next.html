@@ -674,12 +674,12 @@ function stepLevel(step) {
   let i = curLevelNo + step;
 
   if (i<0) {
-    i=0;
-    pos = 0;
+    i = state.levels.length-1;
+    pos = -1;
   }
   if (i>=state.levels.length) {
-    i = state.levels.length-1;
-    pos = 0;
+    i = 0;
+    pos = -1;
   }
 
   const name = state.levels[i].section;
