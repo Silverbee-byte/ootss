@@ -1158,7 +1158,7 @@ RayR
 RULES
 ======
 
-[ action Player ] -> [ action Player CharacterSwap ]
+[ action Player ] -> [ action Player CharacterSwap ] (comment that out for puzzlescript-next)
 
 (since there's no ClosedDoor in layers to prevent player-door conflict and door destruction, add a rule to stop at doors)
 
