@@ -1187,7 +1187,7 @@ down  [ Mirror ] [ RemoveLandLD | no WaterHere ] -> [ Mirror ] [ | ]
 down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 )
 
-(remove characterswap if there's a reflection present, for vanilla Puzzlescript only)
+(remove characterswap if there's a reflection present, for vanilla Puzzlescript only, comment this out for actionkey fork)
 [CharacterSwap] [Reflectable HasReflection] -> [ ] [Reflectable HasReflection]
 
 
