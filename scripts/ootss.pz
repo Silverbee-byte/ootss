@@ -4,10 +4,13 @@ text_color yellow
 key_repeat_interval 0.20
 run_rules_on_level_start
 
-(TODO: this is still unfinished, need CharacterSwap binding on C or action menu)
-(See PuzzleScript Next, xxuurruuii fork https://github.com/xxuurruuii/PuzzleScriptNext)
-(moved towards this fork, see https://joric.github.io/ootss/play-next.html)
+(PuzzleScript Plus)
+(level_select)
+
+(PuzzleScript Next, xxuurruuii fork https://github.com/xxuurruuii/PuzzleScriptNext)
 (actionkey c CharacterSwap)
+(render_height)
+(default_height 0.5)
 
 ========
 OBJECTS
@@ -249,8 +252,7 @@ Brown #493c2b #000000
 02220
 .2.2.
 
-
-Reflection
+BaseReflection
 LightGrey grey DarkGrey
 .....
 ..1..
@@ -266,6 +268,14 @@ LightGrey grey DarkGrey
 .2.2.
 )
 
+MirrorGuyReflection
+LightGrey Grey DarkGrey
+..0..
+.111.
+01110
+02220
+.2.2.
+
 CrateReflection
 LightGrey Grey LightGrey
 .000.
@@ -273,6 +283,15 @@ LightGrey Grey LightGrey
 01110
 01110
 .000.
+
+GoblinReflection
+LightGrey Grey DarkGrey
+0.2.0
+00000
+..0..
+.111.
+.1.1.
+
 
 FloatingBody
 DarkBrown #282828 #101010 Blue
@@ -941,6 +960,8 @@ ColorDoor   = YellowDoor   or BlueDoor   or PurpleDoor   or GreenDoor
 ColorOpen   = YellowOpen   or BlueOpen   or PurpleOpen   or GreenOpen
 ColorSwitch = YellowSwitch or BlueSwitch or PurpleSwitch or GreenSwitch
 
+Reflection = BaseReflection or GoblinReflection or CrateReflection or MirrorGuyReflection
+
 Exit = Goal or Target
 
 Background = HeroBackground or MirrorBackground
@@ -1088,7 +1109,7 @@ Crate, Monster, Corpse, Bush, FrozenMonster, Solid
 ClosedDoor
 
 LOS
-Reflection, CrateReflection
+Reflection
 Note
 
 MundaneSeed
@@ -1187,9 +1208,6 @@ down  [ Mirror ] [ RemoveLandRUD | no WaterHere ] -> [ Mirror ] [ RemoveLandRU |
 down  [ Mirror ] [ RemoveLandLD | no WaterHere ] -> [ Mirror ] [ | ]
 down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 )
-
-(remove characterswap if there's a reflection present, for vanilla Puzzlescript only, comment this out for actionkey fork)
-[CharacterSwap] [Reflectable HasReflection] -> [ ] [Reflectable HasReflection]
 
 
 ( make all possible copies )
@@ -1682,12 +1700,11 @@ left    [ > Counter no Returning | MirrorUR no Mundane ] -> [ | MirrorUR up    C
 + [ > 05 Returning | no Solid ] -> [ | > 04 Returning LOS ]
 + [ > 04 Returning | no Solid ] -> [ | > 03 Returning LOS ]
 + [ > 03 Returning | no Solid ] -> [ | > 02 Returning LOS ]
-+ [ > 02 Tertiary  | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
++ [ > 02 Tertiary  | no Solid ] [ action Reflectable ] -> [ | BaseReflection ] [ Reflectable HasReflection ]
 + [ > 02 Returning | no Solid ] -> [ | > 01 Returning LOS ]
-+ [ > 01 Secondary | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
++ [ > 01 Secondary | no Solid ] [ action Reflectable ] -> [ | BaseReflection ] [ Reflectable HasReflection ]
 + [ > 01 Returning | no Solid ] -> [ | > 00 Returning LOS ]
-+ [ > 00 Returning | no Solid ] [ action Reflectable ] -> [ | Reflection ] [ Reflectable HasReflection ]
-
++ [ > 00 Returning | no Solid ] [ action Reflectable ] -> [ | BaseReflection ] [ Reflectable HasReflection ]
 [ Counter ] -> []
 [ Returning ] -> []
 
@@ -1703,6 +1720,13 @@ endloop
 
 [ DirectionCounter ] -> []
 [ Crossing ] -> []
+
+(assign proper reflections)
+
+[ BaseReflection ] [ MirrorGuy HasReflection ] -> [ MirrorGuyReflection ] [ MirrorGuy HasReflection ]
+[ BaseReflection ] [ SMirrorGuy HasReflection ] -> [ MirrorGuyReflection ] [ SMirrorGuy HasReflection ]
+[ BaseReflection ] [ Goblin HasReflection ] -> [ GoblinReflection ] [ Goblin HasReflection ]
+[ BaseReflection ] [ ReflectableCrate HasReflection ] -> [ CrateReflection ] [ ReflectableCrate HasReflection ]
 
 ==============
 WINCONDITIONS
@@ -2527,8 +2551,8 @@ _____________________
 ####U###...F#
 #############
 
-
 (level heroes2_5_no_crystal)
+
 
 ##############
 ##.T..########
@@ -3097,6 +3121,8 @@ ____...........____
 
 
 (level dont_push_the_button)
+
+(TODO: crate crashing)
 
 _____________%_____
 _..___________..___
