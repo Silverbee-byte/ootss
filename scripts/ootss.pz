@@ -1185,6 +1185,9 @@ down  [ Mirror ] [ RemoveLandLD | no WaterHere ] -> [ Mirror ] [ | ]
 down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 )
 
+(remove characterswap if there's a reflection present, for vanilla Puzzlescript only)
+[CharacterSwap] [Reflectable HasReflection] -> [ ] [Reflectable HasReflection]
+
 
 ( make all possible copies )
 [ action Player ] [ Reflectable HasReflection ] [ Reflection ] -> [ action Player ] [ Reflectable HasReflection ] [ Reflection Reflectable ] sfx5
