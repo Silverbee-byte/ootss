@@ -361,11 +361,15 @@ a {
   <a id="homepagelink" href="https://github.com/david-pfx/PuzzleScriptNext">Made with PuzzlescriptNext</a> <span id="separator">|</span> <a id="hacklink" href="#">hack</a>
 </div>
 
-<div class="controls bottom left">
+<div class="controls top left">
+  <button class="btn btnKey" id="KeyR" title="reset">R</button>
+  <button class="btn btnFn" id="play" title="reset">E</button>
+  <br/>
   <button class="btn btnFn" id="prevMove" title="Previous Move">[</button>
   <button class="btn btnFn" id="nextMove" title="Next Move">]</button>
-  <button class="btn btnKey" id="KeyR" title="reset">R</button>
-  <br>
+</div>
+
+<div class="controls bottom left">
   <button class="btn btnKey" id="KeyZ" title="undo">Z</button>
   <button class="btn btnKey" id="KeyX" title="action">X</button>
   <button class="btn btnKey" id="KeyC" title="swap">C</button>
@@ -403,6 +407,10 @@ let solutions = {};
 let pos = 0;
 let levelName = '';
 let prevLevelNo = -1;
+let solutionTimer = null;
+
+let playDelay = 100;
+let playing = false;
 
 const unpackSolution = s => s.replace(/([A-Z])(\d+)/g, (_,l,n)=>l.repeat(+n));
 const convertSolution = s => unpackSolution(s).toLowerCase();
@@ -430,6 +438,24 @@ const keyCodes = {
   KeyC: 67, // C
   KeyZ: 90, // Z
 };
+
+function play() {
+  updateControls();
+  if (!solutionTimer) {
+    playing = true;
+    playSolution();
+  } else {
+    playing = false;
+    pauseSolution();
+  }
+}
+
+function playSolution() {
+  updateControls();
+  if (!solutionTimer) {
+    solutionTimer = setInterval(sendNextMove, playDelay);
+  }
+}
 
 function getMapLink(name) {
   let mapBase = location.protocol === 'file:' ? 'index.html' : './';
@@ -469,13 +495,22 @@ function updateControls() {
   document.getElementById('moves-after').textContent = after;
 }
 
+function onLevelChange(name) {
+  pos = 0;
+  updateControls();
+  //stopSolution();
+  console.log('playing is', playing);
+  if (playing) {
+    setTimeout(function(){ playSolution() }, 250);
+  }
+}
+
 function monitorLevelUpdate() {
   if (curLevelNo != prevLevelNo) {
     prevLevelNo = curLevelNo;
     levelName = state.levels[curLevelNo].section;
     console.log(`level change ${levelName}`);
-    pos = 0;
-    updateControls();
+    onLevelChange(levelName);
   }
 }
 
@@ -506,14 +541,20 @@ function move(id) {
   }
 }
 
-function showSolution(){
-}
 function stopSolution(){
   pos = 0;
   pauseSolution();
   updateControls();
+  playing = false;
 }
-function pauseSolution(){
+
+function pauseSolution() {
+  if (solutionTimer) {
+    clearInterval(solutionTimer);
+    solutionTimer = null;
+    console.log('Paused.');
+  }
+  //playing = false;
 }
 
 function undo() {
@@ -525,15 +566,8 @@ function undo() {
 }
 
 function prevMove() {
-  showSolution();
-/*
-  if (pos > 0) {
-    pos--;
-  }
-  updateControls();
-*/
-  // just use undo here, too confusing
   undo();
+  updateControls();
 }
 
 function sendMove(code) {
@@ -566,9 +600,6 @@ function sendNextMove() {
     }
 
     if (pos==solution.length-1) console.log('Solution complete.');
-
-    playing = timer != null;
-
   } else {
     pauseSolution();
   }
@@ -577,12 +608,13 @@ function sendNextMove() {
 }
 
 function nextMove() {
-  showSolution();
-  sendNextMove()
+  sendNextMove();
+  updateControls();
 }
 
 
 function reset() {
+  playing = false;
 }
 
 function move(id) {
@@ -668,6 +700,17 @@ function loadLevel(name) {
   }
 }
 
+function firstLevel() {
+  let i = 0;
+  levelName = state.levels[i].section;
+  gotoLevel(i);
+}
+
+function lastLevel() {
+  let i = state.levels.length-1;
+  levelName = state.levels[i].section;
+  gotoLevel(i);
+}
 
 function stepLevel(step) {
 
@@ -816,10 +859,12 @@ window.onload = () => {
     switch (e.code) {
       case 'BracketRight':
         e.preventDefault();
+        pauseSolution();
         nextMove();
         break;
       case 'BracketLeft':
         e.preventDefault();
+        pauseSolution();
         prevMove();
         break;
       case 'KeyR':
@@ -832,6 +877,9 @@ window.onload = () => {
         }
         break;
 
+      case 'Escape':
+        stopSolution();
+        break;
 
       case 'Home': firstLevel(); break;
 
@@ -868,7 +916,7 @@ window.onload = () => {
 
 </script>
 
-<div style = "z-index: 2; background: transparent; position: absolute; top: 0.5em; left: 1em;">
+<div style = "z-index: 2; background: transparent; position: absolute; top: 0.5em; right: 4em;">
   <img alt="mute" id="muteButton" width=32px height=32px onClick="muteAudio()" style="display:none"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABl0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4xOdTWsmQAAAIGSURBVFhH3ZchcsJAGIURiApEBbIH6BEqOQASWYHoESoQFcwgOAaiEsEBKip6BERlBQJRwQEqtu/tvj+TLMnAJpntTL+ZP/De7p/9k102YUCcc0tEbpbx4MHIAMcKQ2LM4ktmOCYH9gXIawXzQasLYGKnAphryErC53VJLiPvhNgjtog54tZ3bgDt7QpgTkyD/42Y+aQa2CG5APYvMdGnFTBC3COeEG8IY4M4uxtsSCqAfQ1ZhSdZATangdNCvhCVImheVQC6FFdKZHtkeQ8fB8QOsUCM5N0hPhBkQ8+gEQ5BXLUb+swSsu0cZXjFE/kswu7ElB6hCAeJS/isCDXZOcaIKeKdHvhBPKiN00F4l+zu1BaQtKkop1Ic5BCx8g3OfSJu5Fthj9LnBfB7Ckqzc/Dq1oihtA34LP0SpHuV7r0AYyXN6SC7SO+ley9gFpQ7SHNNkFifpP9fAcZaOvsUNC3ChbQtwq30eQGg88+QwLKNjRuS/e6toLl0bQGNsF+MmuwcdRuR7Ya2EfEJ6Z8JFOEQRK6tuHg8U4TDBdClr4eRn3uDRjhcCfsasgpPsgLs8uP4iBiryUMzqQDC/iXiFxJbA1zttg4IX9EqgxM2JBdAmBPT4Pf/SmYwr4y8PC+lBnMNWUn4vLbJBvNBtz8m4E//mtkGlK0IjhWG1Jj8EnRWMPhg8AvjeqPLyfe3igAAAABJRU5ErkJggg==" />
   <img alt="unmute" id="unMuteButton" width=32px height=32px onClick="unMuteAudio()" style="display:none" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTnU1rJkAAABqElEQVRYR72XW3LDMAwDc7QerTdPRWjBoW1aedXZGUYUAIlqP9LpLbjf77+jvs3vfvgUvkDMmiPHzGxg9HTXEjNjsB6A0Nar+MxYg+UPFoH5ccLCauE+3Wmqvke+Pk5YWAl3sJuXGiSx3wfSOsMsrKRm4i6DJJAEktB+L1YW1oG4xyAJJIGUSOsMs7A2xB0GSSAJpA3Sz8xgYYnh/8R5g+ZKFG6Q9yAQ9dS3JEcEkkBqkb8K2X8EcYEkkE5RxkH6rkz7VT10uu3wwcbrcOipB+hEg62ZmlR9hbL1wEkJndgRMpVgif1+j3yH6LsSOtGALZAE0rUPwBJICfJ1D0A2ylamfDxXke8QfVfCGdak6pXpNkZBvkP0XeUl3hvkFiKfP8CwT5BPIfavD0iQBNJhEPJnDzCjr6Q31sMfI4P0/gPM6BP20ivTnSClxrZFvkP0WQ4YCQuImfzNYLfId4i+VqL0ExDfgNUi3yF6V6LkC3AsQW6R7xB9rZeHmzhrkFrkO0R/qHcZZ4Plv3sROARHv1mvImbG4GxixbucmDVHMjOauf8qY/jt9gdOODPsYZA1BAAAAABJRU5ErkJggg==" />
 </div>
