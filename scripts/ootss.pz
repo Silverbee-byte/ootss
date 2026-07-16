@@ -19,8 +19,6 @@ run_rules_on_level_start
 OBJECTS
 ========
 
-(mirror isles stuff)
-
 Bedrock
 transparent
 
@@ -424,10 +422,6 @@ Blue
 .....
 .....
 ....0
-
-
-
-(heroes stuff)
 
 HeroBackground
 grey lightgrey
