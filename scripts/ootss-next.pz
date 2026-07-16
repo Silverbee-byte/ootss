@@ -1459,6 +1459,10 @@ late [ColorDoor no DoorMarker no InvDoorMarker] -> [ColorDoor DoorMarker]
 late [ColorOpen no DoorMarker no InvDoorMarker] -> [ColorOpen InvDoorMarker]
 
 
+(play sound when weighing is moved on top of switch)
+
+[> Weighing | Switch] -> [ > Weighing | Switch] sfx3
+
 (yellow door didn't have crate rule because of heroes1_16_v3, no crateinhole, it destroys crates instead)
 
 
