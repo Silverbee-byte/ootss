@@ -68,12 +68,19 @@ a {
 }
 
 .footer { 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
   position: absolute;
   bottom: 0;
   background-color:none;
   text-align:center;
   color:white;
   position:absolute;
+  font-size: 16px;
+}
+
+.links {
   visibility: hidden;
 }
 
@@ -260,19 +267,8 @@ a {
   align-items: center;
 }
 
-.moves{
+.moves {
   font-size: 24px;
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  padding: 16px;
-  flex-shrink: 0;
-  position: absolute;
-}
-
-#moves {
   display: flex;
   align-items: baseline;
   font-family: Arial, sans-serif;
@@ -356,17 +352,6 @@ a {
   <canvas id="gameCanvas"></canvas>
 </div> 
 
-<div class="moves bottom center">
-  <span id="moves">
-    <span id="moves-before"></span>[<span id="moves-at"></span>]<span id="moves-after"></span>
-  </span>
-</div>
-
-<div class="footer">
-  <span id="errormessage" style="color:red;"></span>
-  <a id="homepagelink" href="https://github.com/david-pfx/PuzzleScriptNext">Made with PuzzlescriptNext</a> <span id="separator">|</span> <a id="hacklink" href="#">hack</a>
-</div>
-
 <div class="controls top left">
   <button class="btn btnFn" id="play" title="play">E</button>
   <button class="btn btnFn" id="reset" title="reset">R</button>
@@ -402,6 +387,20 @@ a {
 
 <div class="controls right middle">
   <button class="btn" id="nextLevel" onclick="nextLevel()" title="PageDown or Shift+X - next level, End - last level">&rarr;</button>
+</div>
+
+<div class="footer">
+
+  <div class="moves">
+    <span id="moves-before"></span>[<span id="moves-at"></span>]<span id="moves-after"></span>
+  </div>
+
+  <div class="links">
+    <span id="errormessage" style="color:red;"></span>
+    <a id="homepagelink" href="https://github.com/xxuurruuii/PuzzleScriptNext">Made with PuzzlescriptNext</a>
+    <span id="separator">|</span> <a id="hacklink" href="https://xxuurruuii.github.io/PuzzleScriptNext/src/editor.html" target=_blank>hack</a>
+  </div>
+
 </div>
 
 <script src="js/scripts_play_compiled.js"></script>
@@ -751,6 +750,8 @@ function prevLevel() {
 function displayError(message) {
   var errorText = document.getElementById("errormessage");
   errorText.innerHTML ="ERROR "+message+"<br>";
+
+  errorText.title = message;
 }
 
 function getParameterByName(name) {
@@ -845,11 +846,13 @@ function prepareForPlay(hackArg, code) {
         gametitle.textContent=title;
         window.document.title=title+" - PuzzleScriptNext Game";
     }
-            
+
+    /*
     var hacklink = document.getElementById("hacklink");
     var url = `editor.html?${hackArg}`;
     url=qualifyURL(url);
     hacklink.href=url;
+    */
 
     postLoading();
 }
