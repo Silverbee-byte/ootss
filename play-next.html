@@ -635,16 +635,28 @@ function move(id) {
 }
 
 function init() {
-  document.querySelectorAll('.btnKey').forEach(c=>{ c.onclick = e=> { e.preventDefault(); sendKey(e.target.id); } });
+  document.querySelectorAll('.btnKey').forEach(c=>{ c.onclick = e=> {
+      e.preventDefault();
+      e.stopPropagation();
+      sendKey(e.target.id);
+      return false;
+  }});
 
   document.querySelectorAll('.btnFn').forEach(c=>{ c.onclick = e=> { 
     //console.log(typeof window[e.target.id]);
-    e.preventDefault(); 
-    if (typeof window[e.target.id] === 'function') window[e.target.id](); }
-  });
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof window[e.target.id] === 'function') window[e.target.id]();
+    return false;
+  }});
 
   document.querySelectorAll('.btnMove').forEach(c=>{
-    c.onmousedown = c.ontouchstart = e=>{ e.preventDefault(); move(e.target.id); };
+    c.onmousedown = c.ontouchstart = e=>{ 
+      e.preventDefault();
+      e.stopPropagation();
+      move(e.target.id);
+      return false;
+    };
     c.onmouseup = c.onmouseout = c.ontouchend = ()=>pressed={};
   });
 
