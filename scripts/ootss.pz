@@ -1453,6 +1453,11 @@ late [ Hole Vulnerable ] -> [ Hole ] sfx5
 
 (Vulnerable objects that are attacked are designated as "Dying", but heroes can be saved by the Priest. Then the stuff that didn't get saved dies.)
 
+(cleanup reflections)
+late [LOS] [Dying Monster] -> [] [ Dying Monster ]
+late [Reflection] [Dying Monster] -> [] [ Dying Monster ]
+
+
 Late [Dying Healer] -> [Saved Healer]
 Late [Healer | Dying Hero] -> [Healer | Saved Hero]
 Late [Dying Monster] -> [] sfx5
@@ -1463,6 +1468,10 @@ Late [Dying Hero] -> [Corpse] sfx6
 late [ColorDoor no DoorMarker no InvDoorMarker] -> [ColorDoor DoorMarker]
 late [ColorOpen no DoorMarker no InvDoorMarker] -> [ColorOpen InvDoorMarker]
 
+
+(play sound when weighing is moved on top of switch)
+
+([> Weighing | Switch] -> [ > Weighing | Switch] sfx3)
 
 (yellow door didn't have crate rule because of heroes1_16_v3, no crateinhole, it destroys crates instead)
 
