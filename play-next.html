@@ -664,15 +664,8 @@ function init() {
   let m = document.getElementById('muteButton'); m && m.addEventListener('click', ()=>{ localStorage.mute = true; });
   m = document.getElementById('unMuteButton'); m && m.addEventListener('click', () => { localStorage.removeItem('mute'); });
 
-
-
   if (localStorage.mute) {
     muteAudio();
-  }
-
-  if (location.hash) {
-    let levelName = location.hash.slice(1);
-    setTimeout(()=>{ loadLevel(levelName); }, 250);
   }
 
   const select = document.getElementById('levelSelect');
@@ -689,6 +682,10 @@ function init() {
 
   setInterval(monitorLevelUpdate, 20);
 
+  if (location.hash) {
+    let levelName = location.hash.slice(1);
+    setTimeout(()=>{ loadLevel(levelName); }, 250);
+  }
 }
 
 function postLoading() {
