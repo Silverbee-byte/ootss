@@ -1110,8 +1110,8 @@ Crate, Monster, Corpse, Bush, FrozenMonster, Solid
 
 ClosedDoor
 
-LOS
 Reflection
+LOS
 Note
 
 MundaneSeed
@@ -1211,7 +1211,12 @@ down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 
 
 ( make all possible copies )
-[ action Player ] [ Reflectable HasReflection ] [ Reflection ] -> [ action Player ] [ Reflectable HasReflection ] [ Reflection Reflectable ] sfx5
+[ action Player ] [ MirrorGuy HasReflection ] [ MirrorGuyReflection ] -> [ action Player ] [ MirrorGuy HasReflection ] [ MirrorGuyReflection MirrorGuy ] sfx5
+[ action Player ] [ SMirrorGuy HasReflection ] [ MirrorGuyReflection ] -> [ action Player ] [ SMirrorGuy HasReflection ] [ MirrorGuyReflection SMirrorGuy ] sfx5
+[ action Player ] [ ReflectableCrate HasReflection ] [ CrateReflection ] -> [ action Player ] [ ReflectableCrate HasReflection ] [ CrateReflection ReflectableCrate ] sfx5
+[ action Player ] [ Goblin HasReflection ] [ GoblinReflection ] -> [ action Player ] [ Goblin HasReflection ] [ GoblinReflection Goblin ] sfx5
+
+([ action Player ] [ Reflectable HasReflection ] [ Reflection ] -> [ action Player ] [ Reflectable HasReflection ] [ Reflection Reflectable ] sfx5) ( breaks proper copying )
 
 ( kill the original )
 [ action Player ] [ Reflectable HasReflection ] -> [ action Player ] [ ]
@@ -1709,11 +1714,24 @@ left    [ > Counter no Returning | MirrorUR no Mundane ] -> [ | MirrorUR up    C
 + [ > 05 Returning | no Solid ] -> [ | > 04 Returning LOS ]
 + [ > 04 Returning | no Solid ] -> [ | > 03 Returning LOS ]
 + [ > 03 Returning | no Solid ] -> [ | > 02 Returning LOS ]
+
 + [ > 02 Tertiary  | no Solid ] [ action Reflectable ] -> [ | BaseReflection ] [ Reflectable HasReflection ]
 + [ > 02 Returning | no Solid ] -> [ | > 01 Returning LOS ]
-+ [ > 01 Secondary | no Solid ] [ action Reflectable ] -> [ | BaseReflection ] [ Reflectable HasReflection ]
+
++ [ > 01 Secondary | no Solid ] [ action MirrorGuy ]        -> [ | MirrorGuyReflection ] [ MirrorGuy HasReflection ]
++ [ > 01 Secondary | no Solid ] [ action SMirrorGuy ]       -> [ | MirrorGuyReflection ] [ SMirrorGuy HasReflection ]
++ [ > 01 Secondary | no Solid ] [ action ReflectableCrate ] -> [ | CrateReflection     ] [ ReflectableCrate HasReflection ]
++ [ > 01 Secondary | no Solid ] [ action Goblin ]           -> [ | GoblinReflection    ] [ Goblin HasReflection ]
++ [ > 01 Secondary | no Solid ] [ action Reflectable ]      -> [ | BaseReflection      ] [ Reflectable HasReflection ]
+
 + [ > 01 Returning | no Solid ] -> [ | > 00 Returning LOS ]
-+ [ > 00 Returning | no Solid ] [ action Reflectable ] -> [ | BaseReflection ] [ Reflectable HasReflection ]
+
++ [ > 00 Returning | no Solid ] [ action MirrorGuy ]        -> [ | MirrorGuyReflection ] [ MirrorGuy HasReflection ]
++ [ > 00 Returning | no Solid ] [ action SMirrorGuy ]       -> [ | MirrorGuyReflection ] [ SMirrorGuy HasReflection ]
++ [ > 00 Returning | no Solid ] [ action ReflectableCrate ] -> [ | CrateReflection     ] [ ReflectableCrate HasReflection ]
++ [ > 00 Returning | no Solid ] [ action Goblin ]           -> [ | GoblinReflection    ] [ Goblin HasReflection ]
++ [ > 00 Returning | no Solid ] [ action Reflectable ]      -> [ | BaseReflection      ] [ Reflectable HasReflection ]
+
 [ Counter ] -> []
 [ Returning ] -> []
 
@@ -1730,8 +1748,12 @@ endloop
 [ DirectionCounter ] -> []
 [ Crossing ] -> []
 
-(assign proper reflections)
+(reflections and LOS cannot overlap, cancel the entire thing)
+[ HasReflection ] [ Reflection LOS ] -> [ ] [ Crossing ]
+[ Crossing ] [ LOS ] -> [ Crossing ] [ ]
+[ Crossing ] -> [ ]
 
+(assign proper reflections)
 [ BaseReflection ] [ MirrorGuy HasReflection ] -> [ MirrorGuyReflection ] [ MirrorGuy HasReflection ]
 [ BaseReflection ] [ SMirrorGuy HasReflection ] -> [ MirrorGuyReflection ] [ SMirrorGuy HasReflection ]
 [ BaseReflection ] [ Goblin HasReflection ] -> [ GoblinReflection ] [ Goblin HasReflection ]
