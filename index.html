@@ -453,6 +453,12 @@ let polygonLayer = null;
 
 let solutions = {};
 
+let svgLayer = null;
+let svg = null;
+let layers = {};
+
+let gridLayer = null;
+
 function getSolutionLink(name, solvable) {
   if (solvable) {
     return `play-next.html#${name}`;
@@ -838,7 +844,7 @@ function drawMap() {
 
   markerGroup = L.layerGroup().addTo(map);
 
-  let regionLayer = L.layerGroup().addTo(map);
+  let regionLayer = L.layerGroup();//.addTo(map);
 
   polygonLayer = L.geoJSON(regionData, {
       onEachFeature: (feature, layer) => {
@@ -878,8 +884,7 @@ function drawMap() {
   fetch('data/markers.json').then(r=>r.json()).then(data=>{
 
     counters = {};
-
-    let layers = {};
+    layers = {};
 
 
     function getImageBounds(cellSize, iw,ih, dx, dy) {
@@ -893,12 +898,71 @@ function drawMap() {
     }
 
 
-
     let imageLayer2 = L.imageOverlay('images/overworld.webp', getImageBounds(6.67, 1919, 1079, -149+80,-88.0+83.3),{
       attribution: '<a href="https://youtu.be/q3PUtYGl3J0?t=14" target=_blank>YouTube</a>',
     });//.addTo(map);
 
-    layers['overworld'] = imageLayer2;
+    layers['overworld1'] = imageLayer2;
+
+    let imageLayer3 = L.imageOverlay('images/overworld_2160p.jpg', getImageBounds(13.34, 3840, 2160, -65, -5 ),{
+      attribution: '<a href="https://youtu.be/4m8R1BjjioU?t=90" target=_blank>YouTube</a>',
+      //opacity: 0.5,
+    });//.addTo(map);
+
+
+    layers['overworld2'] = imageLayer3;
+
+
+    //imageLayer3.addTo(map);
+
+    gridLayer = L.layerGroup();
+
+    gw = 19;
+    gh = 13;
+
+    cx = 80;
+    cy = 69;
+
+    d = gh*10;
+
+    const hCells = 9*2;
+    const vCells = 7*2;
+
+    const origin = [cy - gh/2 + gh, cx - gw/2 + gw];
+
+    const bounds = [
+        [origin[0] - (vCells/2)*gh, origin[1] - (hCells/2)*gw],
+        [origin[0] + (vCells/2)*gh, origin[1] + (hCells/2-1)*gw],
+    ];
+
+    const gridStyle = { color: '#fff', weight: 1.5, opacity: 0.7 };
+
+    const lngStep = 1 * gw;//(bounds[1][1] - bounds[0][1]) / steps;
+    const latStep = 1 * gh;//(bounds[1][0] - bounds[0][0]) / steps;
+
+    // vertical lines (meridians)
+    for (let i = 0; i <= hCells-1; i++) {
+        const lng = bounds[0][1] + i * lngStep;
+        gridLayer.addLayer(L.polyline([
+            [bounds[0][0], lng],
+            [bounds[1][0], lng]
+        ], gridStyle));
+    }
+
+    // horizontal lines (parallels)
+    for (let i = 0; i <= vCells; i++) {
+        const lat = bounds[0][0] + i * latStep;
+        gridLayer.addLayer(L.polyline([
+            [lat, bounds[0][1]],
+            [lat, bounds[1][1]]
+        ], gridStyle));
+    }
+
+
+    // add grid to map (visible by default)
+    //gridLayer.addTo(map);
+
+    layers['grid'] = gridLayer;
 
 
     layers['polygons'] = polygonLayer;
@@ -1146,10 +1210,17 @@ function drawMap() {
 
   })
 
-  const svgLayer = L.svg({padding: 2}).addTo(map);
-  const svg = svgLayer._container;
-
   function drawGrid() {
+
+    svgLayer = layers['grid'] || L.svg({padding: 2});
+
+    svgLayer.addTo(map);
+
+    svg = svgLayer._container;
+
+    if (!svg) return;
+
+    //console.log('drawGrid', svg);
 
     while (svg.firstChild) svg.removeChild(svg.firstChild);
 
@@ -1237,10 +1308,6 @@ function drawMap() {
     }
     */
   }
-
-
-  //map.on('move zoomend moveend resize', drawGrid);
-  //map.whenReady(drawGrid);
 
   document.addEventListener("keydown",function (e) {
 
