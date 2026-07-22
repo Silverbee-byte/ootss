@@ -1260,6 +1260,8 @@ down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 
 ([ > Mirror | Hole ] -> [ Mirror | Hole ] sfx4)
 
+[ > Pushable | MirrorInHole ] -> [ Pushable | MirrorInHole ]
+
 [ > Pushable | no Solid ] -> [ | Pushable ]
 + [ > MirrorGuy | no Solid ] -> [ | MirrorGuy ] sfx0
 
