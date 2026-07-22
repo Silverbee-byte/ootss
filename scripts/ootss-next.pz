@@ -1240,7 +1240,6 @@ down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 
 [ moving MirrorGuy ] -> [ moving MirrorGuy HasReflection ] (testing killing)
 
-
 [ Hole Vulnerable ] -> [ Hole Vulnerable Dying ]
 
 
@@ -1266,6 +1265,7 @@ down  [ Mirror ] [ RemoveLandRD | no WaterHere ] -> [ Mirror ] [ | ]
 + [ > MirrorGuy | no Solid ] -> [ | MirrorGuy ] sfx0
 
 [ > MirrorGuy ] -> [ MirrorGuy ] sfx4
+
 
 [ MirrorGuy Hole ] -> [ Hole ]
 
@@ -1466,6 +1466,7 @@ Late [Dying Healer] -> [Saved Healer]
 Late [Healer | Dying Hero] -> [Healer | Saved Hero]
 Late [Dying Monster] -> [] sfx5
 Late [Dying Hero] -> [Corpse] sfx6
+
 
 (Doors opening.)
 
@@ -1769,6 +1770,8 @@ endloop
 WINCONDITIONS
 ==============
 
+no Dying
+no Corpse
 All Hero on Exit
 All Exit on Hero
 
