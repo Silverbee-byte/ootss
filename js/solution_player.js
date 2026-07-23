@@ -350,7 +350,7 @@ function load_player() {
 }
 
 .moves {
-  font-size: 16px;
+  font-size: 14px;
   display: flex;
   align-items: baseline;
   font-family: Arial, sans-serif;
@@ -417,7 +417,7 @@ function load_player() {
       </div>
 
       <div class="moves">
-        <span id="moves-before"></span>[<span id="moves-at"></span>]<span id="moves-after"></span>
+        <span id="moves-before"></span> [ <span id="moves-at"></span> ] <span id="moves-after"></span>
       </div>
 
     </div>
