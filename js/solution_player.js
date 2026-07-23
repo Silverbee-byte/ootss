@@ -400,9 +400,9 @@ function load_player() {
       <div class="buttons">
         <button class="btnFn" id="play" title="E to play, [ ] to step">Play</button>
         <!--button class="btnFn" id="record">Record</button-->
-        <button class="btnFn" id="pauseSolution">Stop</button>
-        <button class="btnFn" id="reset">Reset</button>
-        <button class="btnKey" id="KeyC">Action</button>
+        <button class="btnFn" id="pauseSolution" title="E to stop">Stop</button>
+        <button class="btnFn" id="reset" title="R to reset">Reset</button>
+        <button class="btnKey" id="KeyC" title="C for secondary action">Action</button>
       </div>
 
       <div class="moves">
