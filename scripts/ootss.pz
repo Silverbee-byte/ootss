@@ -5,6 +5,7 @@ key_repeat_interval 0.20
 run_rules_on_level_start
 
 (PuzzleScript Plus)
+homepage joric.github.io/ootss
 level_select
 
 (PuzzleScript Next, xxuurruuii fork https://xxuurruuii.github.io/PuzzleScriptNext/src/editor.html)
