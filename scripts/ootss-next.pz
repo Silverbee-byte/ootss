@@ -1660,7 +1660,7 @@ random [ Mirror ] [ Reflectable no DirectionCounter ] -> [ Mirror ] [ action Ref
 (hit a wall / crate / hero that ISN'T a mirror: the ray is blocked, no reflection)
 [ > Counter | Solid no Mirror ] -> [ | Solid ]
 
-(first mirror hit: bounce, and switch permanently into Returning mode. Mundane only does secondary/tertiary reflections)
+(first mirror hit: bounce; first reflection costs nothing)
 left    [ > Counter no Returning | MirrorUR no Mundane ] -> [ | MirrorUR up    Counter Primary   ]
 + left  [ > Counter no Returning | MirrorDR no Mundane ] -> [ | MirrorDR down  Counter Primary   ]
 + right [ > Counter no Returning | MirrorUL no Mundane ] -> [ | MirrorUL up    Counter Primary   ]
@@ -1670,25 +1670,31 @@ left    [ > Counter no Returning | MirrorUR no Mundane ] -> [ | MirrorUR up    C
 + down  [ > Counter no Returning | MirrorUL no Mundane ] -> [ | MirrorUL left  Counter Primary   ]
 + down  [ > Counter no Returning | MirrorUR no Mundane ] -> [ | MirrorUR right Counter Primary   ]
 
-(Secondary reflection)
-+ left  [ > Counter Primary      | MirrorUR            ] -> [ | MirrorUR up    Counter Secondary ]
-+ left  [ > Counter Primary      | MirrorDR            ] -> [ | MirrorDR down  Counter Secondary ]
-+ right [ > Counter Primary      | MirrorUL            ] -> [ | MirrorUL up    Counter Secondary ]
-+ right [ > Counter Primary      | MirrorDL            ] -> [ | MirrorDL down  Counter Secondary ]
-+ up    [ > Counter Primary      | MirrorDL            ] -> [ | MirrorDL left  Counter Secondary ]
-+ up    [ > Counter Primary      | MirrorDR            ] -> [ | MirrorDR right Counter Secondary ]
-+ down  [ > Counter Primary      | MirrorUL            ] -> [ | MirrorUL left  Counter Secondary ]
-+ down  [ > Counter Primary      | MirrorUR            ] -> [ | MirrorUR right Counter Secondary ]
 
-(Tertiary reflection)
-+ left  [ > Counter Secondary    | MirrorUR            ] -> [ | MirrorUR up    Counter Tertiary  ]
-+ left  [ > Counter Secondary    | MirrorDR            ] -> [ | MirrorDR down  Counter Tertiary  ]
-+ right [ > Counter Secondary    | MirrorUL            ] -> [ | MirrorUL up    Counter Tertiary  ]
-+ right [ > Counter Secondary    | MirrorDL            ] -> [ | MirrorDL down  Counter Tertiary  ]
-+ up    [ > Counter Secondary    | MirrorDL            ] -> [ | MirrorDL left  Counter Tertiary  ]
-+ up    [ > Counter Secondary    | MirrorDR            ] -> [ | MirrorDR right Counter Tertiary  ]
-+ down  [ > Counter Secondary    | MirrorUL            ] -> [ | MirrorUL left  Counter Tertiary  ]
-+ down  [ > Counter Secondary    | MirrorUR            ] -> [ | MirrorUR right Counter Tertiary  ]
+(Secondary reflection costs one: if the counter is already 00, end on this mirror)
++ [ > 00 Primary | Mirror ] -> [ | Mirror ]
+
++ left  [ > Counter Primary no 00 | MirrorUR ] -> [ | MirrorUR up    Counter Secondary ]
++ left  [ > Counter Primary no 00 | MirrorDR ] -> [ | MirrorDR down  Counter Secondary ]
++ right [ > Counter Primary no 00 | MirrorUL ] -> [ | MirrorUL up    Counter Secondary ]
++ right [ > Counter Primary no 00 | MirrorDL ] -> [ | MirrorDL down  Counter Secondary ]
++ up    [ > Counter Primary no 00 | MirrorDL ] -> [ | MirrorDL left  Counter Secondary ]
++ up    [ > Counter Primary no 00 | MirrorDR ] -> [ | MirrorDR right Counter Secondary ]
++ down  [ > Counter Primary no 00 | MirrorUL ] -> [ | MirrorUL left  Counter Secondary ]
++ down  [ > Counter Primary no 00 | MirrorUR ] -> [ | MirrorUR right Counter Secondary ]
+
+
+(Tertiary reflection costs another one: likewise stop at zero)
++ [ > 00 Secondary | Mirror ] -> [ | Mirror ]
+
++ left  [ > Counter Secondary no 00 | MirrorUR ] -> [ | MirrorUR up    Counter Tertiary  ]
++ left  [ > Counter Secondary no 00 | MirrorDR ] -> [ | MirrorDR down  Counter Tertiary  ]
++ right [ > Counter Secondary no 00 | MirrorUL ] -> [ | MirrorUL up    Counter Tertiary  ]
++ right [ > Counter Secondary no 00 | MirrorDL ] -> [ | MirrorDL down  Counter Tertiary  ]
++ up    [ > Counter Secondary no 00 | MirrorDL ] -> [ | MirrorDL left  Counter Tertiary  ]
++ up    [ > Counter Secondary no 00 | MirrorDR ] -> [ | MirrorDR right Counter Tertiary  ]
++ down  [ > Counter Secondary no 00 | MirrorUL ] -> [ | MirrorUL left  Counter Tertiary  ]
++ down  [ > Counter Secondary no 00 | MirrorUR ] -> [ | MirrorUR right Counter Tertiary  ]
 
 (Returning: count back down)
 + [ > 30 Returning | no Solid ] -> [ | > 29 Returning LOS ]
@@ -1762,13 +1768,6 @@ endloop
 
 [ DirectionCounter ] -> []
 [ Crossing ] -> []
-
-(reflections and LOS cannot overlap, cancel the entire thing)
-[ HasReflection ] [ Reflection LOS ] -> [ HasReflection ] [ Crossing Reflection LOS ]
-[ Crossing ] [ LOS ] -> [ Crossing ] [ ]
-[ Crossing ] [ Reflection ] -> [ Crossing ] [ ]
-[ Crossing ] [ HasReflection ] -> [ Crossing ] [ ]
-[ Crossing ] -> [ ]
 
 (assign proper reflections)
 [ BaseReflection ] [ MirrorGuy HasReflection ] -> [ MirrorGuyReflection ] [ MirrorGuy HasReflection ]
@@ -3398,13 +3397,14 @@ _______________
 section custom_1.5
 
 _______________
+_______________
 _'`____________
 _________',`___
 __x______,a,___
 _,___,,__,,,,__
 _,___,,,,~,/,,_
 _,,,,,,___c____
-______,_______
+______,________
 _________x_____
 _______________
 
